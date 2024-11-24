@@ -1,0 +1,20 @@
+tests:
+  - name: "Access protected route with valid token"
+    method: "GET"
+    endpoint: "/protected/profile"
+    expected_status: 200
+    expected_response:
+      message: "Welcome!"
+      username: "testuser"
+    pre_hooks:
+      - seedDatabase
+      - requiresAuth
+    post_hooks:
+      - clearDatabase
+
+  - name: "Access protected route without token"
+    method: "GET"
+    endpoint: "/protected/profile"
+    expected_status: 401
+    expected_response:
+      error: "Invalid token"

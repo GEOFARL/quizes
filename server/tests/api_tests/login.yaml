@@ -1,0 +1,22 @@
+tests:
+  - name: "Login with valid credentials"
+    method: "POST"
+    endpoint: "/login"
+    body:
+      username: "testuser"
+      password: "password123"
+    expected_status: 200
+    expected_response:
+      token: "<non_empty_string>"
+    pre_hooks:
+      - seedDatabase
+
+  - name: "Login with invalid credentials"
+    method: "POST"
+    endpoint: "/login"
+    body:
+      username: "wronguser"
+      password: "wrongpass"
+    expected_status: 401
+    expected_response:
+      error: "invalid username or password"

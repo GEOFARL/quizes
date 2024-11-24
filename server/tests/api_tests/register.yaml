@@ -1,0 +1,28 @@
+tests:
+  - name: "Register new user with valid credentials"
+    method: "POST"
+    endpoint: "/register"
+    body:
+      username: "testuser"
+      password: "password123"
+    expected_status: 201
+    expected_response:
+      message: "user registered successfully"
+    pre_hooks:
+      - clearDatabase
+    post_hooks:
+      - seedDatabase
+
+  - name: "Register existing user"
+    method: "POST"
+    endpoint: "/register"
+    body:
+      username: "testuser"
+      password: "password123"
+    expected_status: 409
+    expected_response:
+      error: "username already exists"
+    pre_hooks:
+      - seedDatabase
+    post_hooks:
+      - clearDatabase
