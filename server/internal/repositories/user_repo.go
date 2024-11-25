@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"auth-service/internal/models"
+	"auth-service/internal/utils"
 	"context"
 	"errors"
 	"time"
@@ -28,9 +29,11 @@ func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
 	if err == mongo.ErrNoDocuments {
 		return nil, errors.New("user not found")
 	} else if err != nil {
+		utils.Logger.WithError(err).Error("Error while finding user by username")
 		return nil, err
 	}
 
+	utils.Logger.WithField("username", username).Info("User found")
 	return &user, nil
 }
 
@@ -40,5 +43,11 @@ func (r *UserRepository) Create(user models.User) error {
 
 	user.CreatedAt = time.Now()
 	_, err := r.collection.InsertOne(ctx, user)
-	return err
+	if err != nil {
+		utils.Logger.WithError(err).Error("Error while creating user")
+		return err
+	}
+
+	utils.Logger.WithField("username", user.Username).Info("User created successfully")
+	return nil
 }

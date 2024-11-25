@@ -5,7 +5,8 @@ import (
 	"auth-service/internal/repositories"
 	"auth-service/internal/routes"
 	"auth-service/internal/services"
-	"log"
+	"auth-service/internal/utils"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -33,6 +34,9 @@ func InitializeApp(cfg *config.Config, db *mongo.Client) *App {
 }
 
 func (app *App) Run() {
-	log.Printf("Server running on port %s", app.Config.Port)
-	log.Fatal(app.Router.Run(":" + app.Config.Port))
+	utils.Logger.WithField("port", app.Config.Port).Info("Server running")
+	if err := app.Router.Run(":" + app.Config.Port); err != nil {
+		utils.Logger.WithError(err).Error("Failed to start the server")
+		os.Exit(1)
+	}
 }

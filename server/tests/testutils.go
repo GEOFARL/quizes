@@ -16,6 +16,8 @@ func CreateTestServer() (*app.App, *mongo.Client) {
 		JwtSecret: "test_secret",
 	}
 
+	utils.InitializeLogger()
+
 	db := utils.ConnectDB(cfg.DbURI)
 
 	return app.InitializeApp(cfg, db), db

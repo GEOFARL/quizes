@@ -2,7 +2,6 @@ package utils
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -15,14 +14,14 @@ func ConnectDB(uri string) *mongo.Client {
 
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
-		log.Fatalf("Failed to connect to MongoDB: %v", err)
+		Logger.WithError(err).Fatal("Failed to connect to MongoDB")
 	}
 
 	err = client.Ping(ctx, nil)
 	if err != nil {
-		log.Fatalf("Failed to ping MongoDB: %v", err)
+		Logger.WithError(err).Fatal("Failed to ping MongoDB")
 	}
 
-	log.Println("Connected to MongoDB")
+	Logger.Info("Connected to MongoDB")
 	return client
 }

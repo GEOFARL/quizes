@@ -30,22 +30,38 @@ type LoginRequest struct {
 
 func (s *AuthService) Register(req RegisterRequest) error {
 	if _, err := s.repo.FindByUsername(req.Username); err == nil {
+		utils.Logger.WithField("username", req.Username).Warn("Username already exists")
 		return errors.New("username already exists")
 	}
 
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-	return s.repo.Create(models.User{Username: req.Username, Password: string(hashedPassword)})
+	if err := s.repo.Create(models.User{Username: req.Username, Password: string(hashedPassword)}); err != nil {
+		utils.Logger.WithError(err).Error("Failed to create user")
+		return err
+	}
+
+	utils.Logger.WithField("username", req.Username).Info("User registered successfully")
+	return nil
 }
 
 func (s *AuthService) Login(req LoginRequest) (string, error) {
 	user, err := s.repo.FindByUsername(req.Username)
 	if err != nil {
+		utils.Logger.WithField("username", req.Username).Warn("Invalid username or password")
 		return "", errors.New("invalid username or password")
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
+		utils.Logger.WithField("username", req.Username).Warn("Invalid username or password")
 		return "", errors.New("invalid username or password")
 	}
 
-	return utils.GenerateJWT(req.Username, s.jwtSecret)
+	token, err := utils.GenerateJWT(req.Username, s.jwtSecret)
+	if err != nil {
+		utils.Logger.WithError(err).Error("Failed to generate JWT")
+		return "", err
+	}
+
+	utils.Logger.WithField("username", req.Username).Info("User logged in successfully")
+	return token, nil
 }

@@ -1,7 +1,7 @@
 package config
 
 import (
-	"log"
+	"auth-service/internal/utils"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -16,7 +16,7 @@ type Config struct {
 
 func LoadConfig() *Config {
 	if err := godotenv.Load(); err != nil {
-		log.Println("Warning: .env file not found, relying on environment variables")
+		utils.Logger.Warn("Warning: .env file not found, relying on environment variables")
 	}
 
 	return &Config{
@@ -30,6 +30,7 @@ func LoadConfig() *Config {
 func getEnv(key, defaultValue string) string {
 	value := os.Getenv(key)
 	if value == "" {
+		utils.Logger.WithField("key", key).WithField("default", defaultValue).Warn("Environment variable not set, using default")
 		return defaultValue
 	}
 	return value
