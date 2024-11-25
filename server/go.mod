@@ -1,6 +1,6 @@
 module auth-service
 
-go 1.23.2
+go 1.23
 
 require go.mongodb.org/mongo-driver v1.17.1
 

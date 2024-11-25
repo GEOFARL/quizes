@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/tmp
+    ports:
+      - "8080:8080"
+    environment:
+      - MONGO_URI=${MONGO_URI:-mongodb://mongo:27017}
+      - DB_NAME=${DB_NAME:-myDB}
+      - JWT_SECRET=${JWT_SECRET:-supersecret}
+      - PORT=${PORT:-8080}
+    depends_on:
+      - mongo
+    command: air
+
+  mongo:
+    image: mongo:5.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    command: mongod --quiet --logpath /dev/null 
+
+volumes:
+  mongo-data:

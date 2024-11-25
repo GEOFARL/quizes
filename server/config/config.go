@@ -22,7 +22,7 @@ func LoadConfig() *Config {
 	return &Config{
 		Port:      getEnv("PORT", "8080"),
 		DbURI:     getEnv("MONGO_URI", "mongodb://localhost:27017"),
-		DBName:    getEnv("DB_NAME", "authDB"),
+		DBName:    getEnv("DB_NAME", "myDB"),
 		JwtSecret: getEnv("JWT_SECRET", "your_secret_key"),
 	}
 }
