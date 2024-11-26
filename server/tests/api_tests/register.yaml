@@ -8,6 +8,7 @@ tests:
     expected_status: 201
     expected_response:
       message: "user registered successfully"
+      token: "<non_empty_string>"
     pre_hooks:
       - clearDatabase
     post_hooks:

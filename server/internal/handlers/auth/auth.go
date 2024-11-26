@@ -22,12 +22,16 @@ func (h *Handler) Register(c *gin.Context) {
 		return
 	}
 
-	if err := h.authService.Register(req); err != nil {
+	token, err := h.authService.Register(req)
+	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "user registered successfully"})
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "user registered successfully",
+		"token":   token,
+	})
 }
 
 func (h *Handler) Login(c *gin.Context) {
