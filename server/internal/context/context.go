@@ -17,7 +17,7 @@ type Context struct {
 func NewContext() *Context {
 	cfg := config.LoadConfig()
 	utils.InitializeLogger()
-	db := utils.ConnectDB(cfg.DbURI)
+	db := utils.ConnectDB(cfg.DBURI)
 	return &Context{
 		Config: cfg,
 		Logger: utils.Logger,

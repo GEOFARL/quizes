@@ -1,7 +1,7 @@
 tests:
   - name: "Register new user with valid credentials"
     method: "POST"
-    endpoint: "/register"
+    endpoint: "/auth/register"
     body:
       username: "testuser"
       password: "password123"
@@ -15,7 +15,7 @@ tests:
 
   - name: "Register existing user"
     method: "POST"
-    endpoint: "/register"
+    endpoint: "/auth/register"
     body:
       username: "testuser"
       password: "password123"

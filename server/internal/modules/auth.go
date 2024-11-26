@@ -34,5 +34,5 @@ func (m *AuthModule) Init() error {
 }
 
 func (m *AuthModule) RegisterRoutes(router *gin.Engine) {
-	routes.RegisterAuthRoutes(router, m.handler, m.context.Config.JwtSecret)
+	routes.RegisterAuthRoutes(router, m.handler, m.context)
 }

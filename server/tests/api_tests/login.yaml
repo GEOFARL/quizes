@@ -1,7 +1,7 @@
 tests:
   - name: "Login with valid credentials"
     method: "POST"
-    endpoint: "/login"
+    endpoint: "/auth/login"
     body:
       username: "testuser"
       password: "password123"
@@ -13,7 +13,7 @@ tests:
 
   - name: "Login with invalid credentials"
     method: "POST"
-    endpoint: "/login"
+    endpoint: "/auth/login"
     body:
       username: "wronguser"
       password: "wrongpass"

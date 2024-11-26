@@ -9,13 +9,14 @@ import (
 func NewTestContext() *context.Context {
 	cfg := &config.Config{
 		Port:        "8080",
-		DbURI:       "mongodb://localhost:27017/",
+		DBURI:       "mongodb://localhost:27017/",
 		DBName:      "testdb",
 		JwtSecret:   "test_secret",
 		Collections: config.NewCollections(),
+		Routes:      config.NewRouteRegistry(),
 	}
 	utils.InitializeLogger()
-	db := utils.ConnectDB(cfg.DbURI)
+	db := utils.ConnectDB(cfg.DBURI)
 	return &context.Context{
 		Config: cfg,
 		Logger: utils.Logger,

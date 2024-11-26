@@ -19,6 +19,7 @@ func GenerateJWT(username, secret string) (string, error) {
 		return "", err
 	}
 	Logger.WithField("username", username).Info("JWT generated successfully")
+	Logger.WithField("token", signedToken).Info("JWT generated successfully")
 	return signedToken, nil
 }
 

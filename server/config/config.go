@@ -9,10 +9,11 @@ import (
 
 type Config struct {
 	Port        string
-	DbURI       string
+	DBURI       string
 	DBName      string
 	JwtSecret   string
 	Collections *Collections
+	Routes      *RouteRegistry
 }
 
 func LoadConfig() *Config {
@@ -22,10 +23,11 @@ func LoadConfig() *Config {
 
 	return &Config{
 		Port:        getEnv("PORT", "8080"),
-		DbURI:       getEnv("MONGO_URI", "mongodb://localhost:27017"),
+		DBURI:       getEnv("MONGO_URI", "mongodb://localhost:27017"),
 		DBName:      getEnv("DB_NAME", "myDB"),
 		JwtSecret:   getEnv("JWT_SECRET", "your_secret_key"),
 		Collections: NewCollections(),
+		Routes:      NewRouteRegistry(),
 	}
 }
 
