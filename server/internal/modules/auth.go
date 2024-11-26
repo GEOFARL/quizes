@@ -13,24 +13,26 @@ import (
 
 type AuthModule struct {
 	context *context.Context
+	handler *handlers.AuthHandler
 }
 
 func NewAuthModule(ctx *context.Context) *AuthModule {
 	return &AuthModule{
 		context: ctx,
+		handler: nil,
 	}
 }
-
-func (m *AuthModule) Init(router *gin.Engine) error {
+func (m *AuthModule) Init() error {
 	userRepo, err := repository.NewUserRepository("mongo", m.context.DB, m.context.Config.DBName, m.context.Config.Collections.Users)
 	if err != nil {
 		utils.Logger.WithError(err).Error("Failed to initialize UserRepository")
 		return err
 	}
-
 	authService := services.NewAuthService(userRepo, m.context.Config.JwtSecret)
-	authHandler := handlers.NewAuthHandler(authService)
-	routes.RegisterAuthRoutes(router, authHandler, m.context.Config.JwtSecret)
-	utils.Logger.Info("Auth module initialized successfully")
+	m.handler = handlers.NewAuthHandler(authService)
 	return nil
+}
+
+func (m *AuthModule) RegisterRoutes(router *gin.Engine) {
+	routes.RegisterAuthRoutes(router, m.handler, m.context.Config.JwtSecret)
 }

@@ -22,9 +22,10 @@ func NewApp(ctx *context.Context) *App {
 
 func (a *App) RegisterModules(modules ...modules.Module) error {
 	for _, module := range modules {
-		if err := module.Init(a.Router); err != nil {
+		if err := module.Init(); err != nil {
 			return err
 		}
+		module.RegisterRoutes(a.Router)
 	}
 	return nil
 }

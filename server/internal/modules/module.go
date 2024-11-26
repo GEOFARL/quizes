@@ -5,5 +5,6 @@ import (
 )
 
 type Module interface {
-	Init(router *gin.Engine) error
+	Init() error
+	RegisterRoutes(router *gin.Engine)
 }
