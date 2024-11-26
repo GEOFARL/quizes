@@ -19,7 +19,6 @@ func NewTestContext() *context.Context {
 	db := utils.ConnectDB(cfg.DBURI)
 	return &context.Context{
 		Config: cfg,
-		Logger: utils.Logger,
 		DB:     db,
 	}
 }

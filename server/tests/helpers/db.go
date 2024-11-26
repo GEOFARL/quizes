@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -33,7 +34,7 @@ func seedDatabase(db *mongo.Client, dbName string, seedData []SeedData) error {
 	return nil
 }
 
-func SeedTestDatabase(db *mongo.Client, dbName string) error {
+func SeedTestDatabase(db interface{}, dbName string) error {
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte("password123"), bcrypt.DefaultCost)
 
 	seedData := []SeedData{
@@ -46,12 +47,21 @@ func SeedTestDatabase(db *mongo.Client, dbName string) error {
 		},
 	}
 
-	return seedDatabase(db, dbName, seedData)
+	dbClient, ok := db.(*mongo.Client)
+	if !ok {
+		return errors.New("invalid MongoDB client")
+	}
+
+	return seedDatabase(dbClient, dbName, seedData)
 }
 
-func ClearDatabase(db *mongo.Client, dbName string) error {
+func ClearDatabase(db interface{}, dbName string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	return db.Database(dbName).Drop(ctx)
+	dbClient, ok := db.(*mongo.Client)
+	if !ok {
+		return errors.New("invalid MongoDB client")
+	}
+	return dbClient.Database(dbName).Drop(ctx)
 }
