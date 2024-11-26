@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"auth-service/internal/app"
 	"auth-service/tests/helpers"
 	testsuite "auth-service/tests/test_suite"
 	"net/http/httptest"
@@ -13,11 +14,12 @@ import (
 )
 
 func TestYAMLTests(t *testing.T) {
-	app, db := CreateTestServer()
+	ctx := NewTestContext()
+	app := app.InitializeApp(ctx)
 	ts := httptest.NewServer(app.Router)
 	defer ts.Close()
 
-	client := helpers.NewTestClient(ts.URL, db, app.Config)
+	client := helpers.NewTestClient(ts.URL, ctx)
 
 	cwd, _ := os.Getwd()
 	apiTestsPath := filepath.Join(cwd, "api_tests")

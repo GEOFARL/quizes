@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"auth-service/internal/context"
 	"auth-service/internal/handlers"
 	repository "auth-service/internal/repositories/user"
 	"auth-service/internal/routes"
@@ -11,26 +12,25 @@ import (
 )
 
 type AuthModule struct {
-	context *context
+	context *context.Context
 }
 
-func NewAuthModule(ctx *context) *AuthModule {
+func NewAuthModule(ctx *context.Context) *AuthModule {
 	return &AuthModule{
 		context: ctx,
 	}
 }
 
 func (m *AuthModule) Init(router *gin.Engine) error {
-	userRepo, err := repository.NewUserRepository("mongo", m.context.db, m.context.config.DBName, m.context.config.Collections.Users)
+	userRepo, err := repository.NewUserRepository("mongo", m.context.DB, m.context.Config.DBName, m.context.Config.Collections.Users)
 	if err != nil {
 		utils.Logger.WithError(err).Error("Failed to initialize UserRepository")
 		return err
 	}
 
-	authService := services.NewAuthService(userRepo, m.context.config.JwtSecret)
+	authService := services.NewAuthService(userRepo, m.context.Config.JwtSecret)
 	authHandler := handlers.NewAuthHandler(authService)
-	routes.RegisterAuthRoutes(router, authHandler, m.context.config.JwtSecret)
-
+	routes.RegisterAuthRoutes(router, authHandler, m.context.Config.JwtSecret)
 	utils.Logger.Info("Auth module initialized successfully")
 	return nil
 }

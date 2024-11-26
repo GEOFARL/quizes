@@ -1,7 +1,7 @@
 package app
 
 import (
-	"auth-service/config"
+	"auth-service/internal/context"
 	"auth-service/internal/modules"
 	"auth-service/internal/utils"
 	"os"
@@ -10,13 +10,12 @@ import (
 )
 
 type App struct {
-	Config *config.Config
-	Router *gin.Engine
+	Router  *gin.Engine
+	Context *context.Context
 }
 
-func NewApp(cfg *config.Config) *App {
+func NewApp(ctx *context.Context) *App {
 	return &App{
-		Config: cfg,
 		Router: gin.Default(),
 	}
 }
@@ -30,10 +29,9 @@ func (a *App) RegisterModules(modules ...modules.Module) error {
 	return nil
 }
 
-func InitializeApp(cfg *config.Config, db interface{}) *App {
-	app := NewApp(cfg)
+func InitializeApp(ctx *context.Context) *App {
+	app := NewApp(ctx)
 
-	ctx := modules.NewContext(db, cfg)
 	modules := []modules.Module{
 		modules.NewAuthModule(ctx),
 	}
@@ -46,8 +44,8 @@ func InitializeApp(cfg *config.Config, db interface{}) *App {
 }
 
 func (app *App) Run() {
-	utils.Logger.WithField("port", app.Config.Port).Info("Server running")
-	if err := app.Router.Run(":" + app.Config.Port); err != nil {
+	utils.Logger.WithField("port", app.Context.Config.Port).Info("Server running")
+	if err := app.Router.Run(":" + app.Context.Config.Port); err != nil {
 		utils.Logger.WithError(err).Error("Failed to start the server")
 		os.Exit(1)
 	}

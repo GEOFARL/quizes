@@ -1,15 +1,11 @@
 package main
 
 import (
-	"auth-service/config"
 	"auth-service/internal/app"
-	"auth-service/internal/utils"
+	"auth-service/internal/context"
 )
 
 func main() {
-	cfg := config.LoadConfig()
-	utils.InitializeLogger()
-	db := utils.ConnectDB(cfg.DbURI)
-	app := app.InitializeApp(cfg, db)
+	app := app.InitializeApp(context.NewContext())
 	app.Run()
 }

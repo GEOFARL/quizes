@@ -1,27 +1,23 @@
 package helpers
 
 import (
-	"auth-service/config"
+	"auth-service/internal/context"
 	"bytes"
 	"encoding/json"
 	"net/http"
-
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type TestClient struct {
 	BaseURL string
 	Client  *http.Client
-	DB      *mongo.Client
-	Config  *config.Config
+	Context *context.Context
 }
 
-func NewTestClient(baseURL string, db *mongo.Client, cfg *config.Config) *TestClient {
+func NewTestClient(baseURL string, ctx *context.Context) *TestClient {
 	return &TestClient{
 		BaseURL: baseURL,
 		Client:  &http.Client{},
-		DB:      db,
-		Config:  cfg,
+		Context: ctx,
 	}
 }
 

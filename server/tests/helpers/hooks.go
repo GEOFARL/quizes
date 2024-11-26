@@ -10,10 +10,10 @@ type Hook func(client *TestClient, testCase *testsuite.TestCase) error
 var Hooks = map[string]Hook{
 	"requiresAuth": requiresAuthHook,
 	"clearDatabase": func(client *TestClient, _ *testsuite.TestCase) error {
-		return ClearDatabase(client.DB, client.Config.DBName)
+		return ClearDatabase(client.Context.DB, client.Context.Config.DBName)
 	},
 	"seedDatabase": func(client *TestClient, _ *testsuite.TestCase) error {
-		return SeedTestDatabase(client.DB, client.Config.DBName)
+		return SeedTestDatabase(client.Context.DB, client.Context.Config.DBName)
 	},
 }
 
