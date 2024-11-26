@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"auth-service/config"
 	"auth-service/internal/models"
 	"auth-service/internal/utils"
 	"context"
@@ -15,8 +16,8 @@ type UserRepository struct {
 	collection *mongo.Collection
 }
 
-func NewUserRepository(client *mongo.Client, dbName string) *UserRepository {
-	collection := client.Database(dbName).Collection("users")
+func NewUserRepository(client *mongo.Client, cfg *config.Config) *UserRepository {
+	collection := client.Database(cfg.DBName).Collection(cfg.Collections.Users)
 	return &UserRepository{collection: collection}
 }
 

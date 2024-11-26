@@ -10,10 +10,11 @@ import (
 
 func CreateTestServer() (*app.App, *mongo.Client) {
 	cfg := &config.Config{
-		Port:      "8080",
-		DbURI:     "mongodb://localhost:27017/",
-		DBName:    "testdb",
-		JwtSecret: "test_secret",
+		Port:        "8080",
+		DbURI:       "mongodb://localhost:27017/",
+		DBName:      "testdb",
+		JwtSecret:   "test_secret",
+		Collections: config.NewCollections(),
 	}
 
 	utils.InitializeLogger()

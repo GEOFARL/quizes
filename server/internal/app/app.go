@@ -19,7 +19,7 @@ type App struct {
 }
 
 func InitializeApp(cfg *config.Config, db *mongo.Client) *App {
-	userRepo := repositories.NewUserRepository(db, cfg.DBName)
+	userRepo := repositories.NewUserRepository(db, cfg)
 	authService := services.NewAuthService(userRepo, cfg.JwtSecret)
 
 	router := gin.Default()
