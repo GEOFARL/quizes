@@ -3,6 +3,7 @@ package app
 import (
 	"auth-service/internal/context"
 	"auth-service/internal/modules"
+	authModule "auth-service/internal/modules/auth"
 	"auth-service/internal/utils"
 	"os"
 
@@ -14,7 +15,7 @@ type App struct {
 	Context *context.Context
 }
 
-func NewApp(ctx *context.Context) *App {
+func New(ctx *context.Context) *App {
 	return &App{
 		Router: gin.Default(),
 	}
@@ -31,10 +32,10 @@ func (a *App) RegisterModules(modules ...modules.Module) error {
 }
 
 func InitializeApp(ctx *context.Context) *App {
-	app := NewApp(ctx)
+	app := New(ctx)
 
 	modules := []modules.Module{
-		modules.NewAuthModule(ctx),
+		authModule.New(ctx),
 	}
 
 	if err := app.RegisterModules(modules...); err != nil {

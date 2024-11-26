@@ -1,14 +1,14 @@
-package routes
+package auth
 
 import (
 	"auth-service/internal/context"
-	"auth-service/internal/handlers"
+	"auth-service/internal/handlers/auth"
 	"auth-service/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterAuthRoutes(router *gin.Engine, authHandler *handlers.AuthHandler, ctx *context.Context) {
+func Register(router *gin.Engine, authHandler *auth.Handler, ctx *context.Context) {
 	auth := router.Group(ctx.Config.Routes.Auth.Base)
 	auth.POST(ctx.Config.Routes.Auth.Register, authHandler.Register)
 	auth.POST(ctx.Config.Routes.Auth.Login, authHandler.Login)

@@ -1,4 +1,4 @@
-package repository
+package user
 
 import (
 	"auth-service/internal/models"
@@ -11,16 +11,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type MongoUserRepository struct {
+type MongoRepository struct {
 	collection *mongo.Collection
 }
 
-func NewMongoUserRepository(client *mongo.Client, dbName string, collectionName string) *MongoUserRepository {
+func NewMongoRepository(client *mongo.Client, dbName string, collectionName string) *MongoRepository {
 	collection := client.Database(dbName).Collection(collectionName)
-	return &MongoUserRepository{collection: collection}
+	return &MongoRepository{collection: collection}
 }
 
-func (r *MongoUserRepository) FindByUsername(username string) (*models.User, error) {
+func (r *MongoRepository) FindByUsername(username string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -37,7 +37,7 @@ func (r *MongoUserRepository) FindByUsername(username string) (*models.User, err
 	return &user, nil
 }
 
-func (r *MongoUserRepository) Create(user models.User) error {
+func (r *MongoRepository) Create(user models.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

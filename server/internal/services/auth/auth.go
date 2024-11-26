@@ -1,4 +1,4 @@
-package services
+package auth
 
 import (
 	"auth-service/internal/models"
@@ -9,13 +9,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AuthService struct {
+type Service struct {
 	repo      repository.UserRepository
 	jwtSecret string
 }
 
-func NewAuthService(repo repository.UserRepository, jwtSecret string) *AuthService {
-	return &AuthService{repo: repo, jwtSecret: jwtSecret}
+func New(repo repository.UserRepository, jwtSecret string) *Service {
+	return &Service{repo: repo, jwtSecret: jwtSecret}
 }
 
 type RegisterRequest struct {
@@ -28,7 +28,7 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
-func (s *AuthService) Register(req RegisterRequest) error {
+func (s *Service) Register(req RegisterRequest) error {
 	if _, err := s.repo.FindByUsername(req.Username); err == nil {
 		utils.Logger.WithField("username", req.Username).Warn("Username already exists")
 		return errors.New("username already exists")
@@ -44,7 +44,7 @@ func (s *AuthService) Register(req RegisterRequest) error {
 	return nil
 }
 
-func (s *AuthService) Login(req LoginRequest) (string, error) {
+func (s *Service) Login(req LoginRequest) (string, error) {
 	user, err := s.repo.FindByUsername(req.Username)
 	if err != nil {
 		utils.Logger.WithField("username", req.Username).Warn("Invalid username or password")

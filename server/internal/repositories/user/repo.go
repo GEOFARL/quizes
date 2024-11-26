@@ -1,4 +1,4 @@
-package repository
+package user
 
 import (
 	"auth-service/internal/models"
@@ -19,7 +19,7 @@ func NewUserRepository(dbType string, dbClient interface{}, dbName, collectionNa
 		if !ok {
 			return nil, errors.New("invalid MongoDB client")
 		}
-		return NewMongoUserRepository(client, dbName, collectionName), nil
+		return NewMongoRepository(client, dbName, collectionName), nil
 	default:
 		return nil, errors.New("unsupported database type")
 	}
