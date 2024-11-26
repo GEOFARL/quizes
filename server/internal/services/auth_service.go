@@ -2,7 +2,7 @@ package services
 
 import (
 	"auth-service/internal/models"
-	"auth-service/internal/repositories"
+	repository "auth-service/internal/repositories/user"
 	"auth-service/internal/utils"
 	"errors"
 
@@ -10,11 +10,11 @@ import (
 )
 
 type AuthService struct {
-	repo      *repositories.UserRepository
+	repo      repository.UserRepository
 	jwtSecret string
 }
 
-func NewAuthService(repo *repositories.UserRepository, jwtSecret string) *AuthService {
+func NewAuthService(repo repository.UserRepository, jwtSecret string) *AuthService {
 	return &AuthService{repo: repo, jwtSecret: jwtSecret}
 }
 

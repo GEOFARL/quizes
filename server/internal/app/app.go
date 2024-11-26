@@ -2,7 +2,7 @@ package app
 
 import (
 	"auth-service/config"
-	"auth-service/internal/repositories"
+	repository "auth-service/internal/repositories/user"
 	"auth-service/internal/routes"
 	"auth-service/internal/services"
 	"auth-service/internal/utils"
@@ -19,7 +19,11 @@ type App struct {
 }
 
 func InitializeApp(cfg *config.Config, db *mongo.Client) *App {
-	userRepo := repositories.NewUserRepository(db, cfg)
+	userRepo, err := repository.NewUserRepository("mongo", db, cfg.DBName, cfg.Collections.Users)
+	if err != nil {
+		utils.Logger.WithError(err).Error("Failed to initialize user repository")
+		os.Exit(1)
+	}
 	authService := services.NewAuthService(userRepo, cfg.JwtSecret)
 
 	router := gin.Default()

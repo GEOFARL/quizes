@@ -1,7 +1,6 @@
-package repositories
+package repository
 
 import (
-	"auth-service/config"
 	"auth-service/internal/models"
 	"auth-service/internal/utils"
 	"context"
@@ -12,16 +11,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type UserRepository struct {
+type MongoUserRepository struct {
 	collection *mongo.Collection
 }
 
-func NewUserRepository(client *mongo.Client, cfg *config.Config) *UserRepository {
-	collection := client.Database(cfg.DBName).Collection(cfg.Collections.Users)
-	return &UserRepository{collection: collection}
+func NewMongoUserRepository(client *mongo.Client, dbName string, collectionName string) *MongoUserRepository {
+	collection := client.Database(dbName).Collection(collectionName)
+	return &MongoUserRepository{collection: collection}
 }
 
-func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
+func (r *MongoUserRepository) FindByUsername(username string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -38,7 +37,7 @@ func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
 	return &user, nil
 }
 
-func (r *UserRepository) Create(user models.User) error {
+func (r *MongoUserRepository) Create(user models.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
