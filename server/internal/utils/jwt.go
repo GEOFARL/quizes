@@ -7,7 +7,6 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-// GenerateJWT creates a JWT token for a given username using the provided secret.
 func GenerateJWT(username, secret string) (string, error) {
 	claims := jwt.MapClaims{
 		"username": username,

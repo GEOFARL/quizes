@@ -2,39 +2,47 @@ package app
 
 import (
 	"auth-service/config"
-	repository "auth-service/internal/repositories/user"
-	"auth-service/internal/routes"
-	"auth-service/internal/services"
+	"auth-service/internal/modules"
 	"auth-service/internal/utils"
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type App struct {
-	Config      *config.Config
-	Router      *gin.Engine
-	AuthService *services.AuthService
+	Config *config.Config
+	Router *gin.Engine
 }
 
-func InitializeApp(cfg *config.Config, db *mongo.Client) *App {
-	userRepo, err := repository.NewUserRepository("mongo", db, cfg.DBName, cfg.Collections.Users)
-	if err != nil {
-		utils.Logger.WithError(err).Error("Failed to initialize user repository")
-		os.Exit(1)
-	}
-	authService := services.NewAuthService(userRepo, cfg.JwtSecret)
-
-	router := gin.Default()
-
-	routes.RegisterRoutes(router, authService, cfg.JwtSecret)
-
+func NewApp(cfg *config.Config) *App {
 	return &App{
-		Config:      cfg,
-		Router:      router,
-		AuthService: authService,
+		Config: cfg,
+		Router: gin.Default(),
 	}
+}
+
+func (a *App) RegisterModules(modules ...modules.Module) error {
+	for _, module := range modules {
+		if err := module.Init(a.Router); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func InitializeApp(cfg *config.Config, db interface{}) *App {
+	app := NewApp(cfg)
+
+	ctx := modules.NewContext(db, cfg)
+	modules := []modules.Module{
+		modules.NewAuthModule(ctx),
+	}
+
+	if err := app.RegisterModules(modules...); err != nil {
+		utils.Logger.WithError(err).Fatal("Failed to initialize modules")
+	}
+
+	return app
 }
 
 func (app *App) Run() {
