@@ -3,7 +3,7 @@ tests:
     method: "POST"
     endpoint: "/auth/login"
     body:
-      username: "testuser"
+      email: "test@gmail.com"
       password: "password123"
     expected_status: 200
     expected_response:
@@ -15,8 +15,8 @@ tests:
     method: "POST"
     endpoint: "/auth/login"
     body:
-      username: "wronguser"
+      email: "wrong_email@gmail.com"
       password: "wrongpass"
     expected_status: 401
     expected_response:
-      error: "invalid username or password"
+      error: "invalid email or password"

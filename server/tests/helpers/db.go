@@ -41,8 +41,8 @@ func SeedTestDatabase(db interface{}, dbName string) error {
 		{
 			Collection: "users",
 			Documents: []map[string]interface{}{
-				{"username": "testuser", "password": string(hashedPassword)},
-				{"username": "anotheruser", "password": string(hashedPassword)},
+				{"email": "test@gmail.com", "password": string(hashedPassword)},
+				{"email": "another@gmail.com", "password": string(hashedPassword)},
 			},
 		},
 	}

@@ -3,7 +3,7 @@ tests:
     method: "POST"
     endpoint: "/auth/register"
     body:
-      username: "testuser"
+      email: "abcd@gmail.com"
       password: "password123"
     expected_status: 201
     expected_response:
@@ -17,11 +17,11 @@ tests:
     method: "POST"
     endpoint: "/auth/register"
     body:
-      username: "testuser"
+      email: "test@gmail.com"
       password: "password123"
     expected_status: 409
     expected_response:
-      error: "username already exists"
+      error: "email already exists"
     pre_hooks:
       - seedDatabase
     post_hooks:

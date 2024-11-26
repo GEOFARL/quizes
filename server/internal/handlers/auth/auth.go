@@ -47,9 +47,9 @@ func (h *Handler) Login(c *gin.Context) {
 }
 
 func (h *Handler) Profile(c *gin.Context) {
-	username, _ := c.Get("username")
+	userID, _ := c.Get("user_id")
 	c.JSON(http.StatusOK, gin.H{
-		"message":  "Welcome!",
-		"username": username,
+		"message": "Welcome!",
+		"user_id": userID,
 	})
 }

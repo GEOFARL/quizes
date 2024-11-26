@@ -27,8 +27,8 @@ func ValidateJWT(secret string) gin.HandlerFunc {
 			return
 		}
 
-		c.Set("username", claims["username"])
-		utils.Logger.WithField("username", claims["username"]).Info("JWT validated successfully")
+		c.Set("user_id", claims["user_id"])
+		utils.Logger.WithField("user_id", claims["user_id"]).Info("JWT validated successfully")
 		c.Next()
 	}
 }

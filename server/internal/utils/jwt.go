@@ -7,10 +7,10 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateJWT(username, secret string) (string, error) {
+func GenerateJWT(userID, secret string) (string, error) {
 	claims := jwt.MapClaims{
-		"username": username,
-		"exp":      time.Now().Add(time.Hour).Unix(),
+		"user_id": userID,
+		"exp":     time.Now().Add(24 * time.Hour).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedToken, err := token.SignedString([]byte(secret))
@@ -18,7 +18,7 @@ func GenerateJWT(username, secret string) (string, error) {
 		Logger.WithError(err).Error("Failed to sign JWT")
 		return "", err
 	}
-	Logger.WithField("username", username).Info("JWT generated successfully")
+	Logger.WithField("userID", userID).Info("JWT generated successfully")
 	Logger.WithField("token", signedToken).Info("JWT generated successfully")
 	return signedToken, nil
 }
@@ -37,7 +37,7 @@ func ValidateJWT(tokenString string, secret string) (jwt.MapClaims, error) {
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		Logger.WithField("username", claims["username"]).Info("JWT validated successfully")
+		Logger.WithField("username", claims["user_id"]).Info("JWT validated successfully")
 		return claims, nil
 	}
 
