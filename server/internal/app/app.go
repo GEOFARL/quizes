@@ -17,7 +17,8 @@ type App struct {
 
 func New(ctx *context.Context) *App {
 	return &App{
-		Router: gin.Default(),
+		Router:  gin.Default(),
+		Context: ctx,
 	}
 }
 
