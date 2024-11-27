@@ -1,5 +1,7 @@
+import LoginDialog from "@/components/auth/LoginDialog";
+
 const Page: React.FC = () => {
-  return <p>MODAL</p>;
+  return <LoginDialog />;
 };
 
 export default Page;

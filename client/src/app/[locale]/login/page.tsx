@@ -1,5 +1,7 @@
+import LoginScreen from "@/components/screens/auth/Login";
+
 const Page: React.FC = () => {
-  return <p>LOGIN</p>;
+  return <LoginScreen />;
 };
 
 export default Page;

@@ -1,3 +1,5 @@
+import { HttpError } from "@/lib/errors/http-error";
+
 export type FetchOptions = RequestInit & {
   queryParams?: Record<string, unknown>;
 };
@@ -45,10 +47,29 @@ export class BaseApi {
       },
     });
 
+    const responseBody = await this.getResponseBody(response);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new HttpError(
+        `HTTP error! status: ${response.status} - ${response.statusText}`,
+        {
+          status: response.status,
+          statusText: response.statusText,
+          url,
+          body: responseBody,
+        }
+      );
     }
 
-    return response.json();
+    return responseBody;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private async getResponseBody(response: Response): Promise<any> {
+    const contentType = response.headers.get("Content-Type");
+    if (contentType?.includes("application/json")) {
+      return response.json();
+    }
+
+    return response.text();
   }
 }

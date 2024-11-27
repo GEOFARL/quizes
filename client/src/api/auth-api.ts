@@ -1,5 +1,5 @@
-import { RegisterPayload } from "@/types/auth/payload";
-import { RegisterResponse } from "@/types/auth/response";
+import { LoginPayload, RegisterPayload } from "@/types/auth/payload";
+import { LoginResponse, RegisterResponse } from "@/types/auth/response";
 import { BaseApi } from "./base-api";
 import { autobind } from "@/lib/autobind";
 
@@ -11,6 +11,13 @@ class AuthApi extends BaseApi {
 
   async register(payload: RegisterPayload): Promise<RegisterResponse> {
     return this.fetch<RegisterResponse>("/register", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  }
+
+  async login(payload: LoginPayload): Promise<LoginResponse> {
+    return this.fetch<LoginResponse>("/login", {
       method: "POST",
       body: JSON.stringify(payload),
     });
