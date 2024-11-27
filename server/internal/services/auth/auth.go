@@ -22,6 +22,7 @@ func New(repo repository.UserRepository, jwtSecret string) *Service {
 type RegisterRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+	FullName string `json:"fullName"`
 }
 
 type LoginRequest struct {
@@ -39,6 +40,7 @@ func (s *Service) Register(req RegisterRequest) (string, error) {
 
 	user := models.User{
 		Email:     req.Email,
+		FullName:  req.FullName,
 		Password:  string(hashedPassword),
 		CreatedAt: time.Now(),
 	}
@@ -47,7 +49,7 @@ func (s *Service) Register(req RegisterRequest) (string, error) {
 		return "", err
 	}
 
-	token, err := utils.GenerateJWT(user.ID.Hex(), s.jwtSecret)
+	token, err := utils.GenerateJWT(user.ToTokenClaims(), s.jwtSecret)
 	if err != nil {
 		utils.Logger.WithError(err).Error("Failed to generate JWT")
 		return "", err
@@ -69,7 +71,7 @@ func (s *Service) Login(req LoginRequest) (string, error) {
 		return "", errors.New("invalid email or password")
 	}
 
-	token, err := utils.GenerateJWT(user.ID.Hex(), s.jwtSecret)
+	token, err := utils.GenerateJWT(user.ToTokenClaims(), s.jwtSecret)
 	if err != nil {
 		utils.Logger.WithError(err).Error("Failed to generate JWT")
 		return "", err

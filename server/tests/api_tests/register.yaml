@@ -5,6 +5,7 @@ tests:
     body:
       email: "abcd@gmail.com"
       password: "password123"
+      fullName: "John Doe"
     expected_status: 201
     expected_response:
       message: "user registered successfully"
@@ -20,6 +21,7 @@ tests:
     body:
       email: "test@gmail.com"
       password: "password123"
+      fullName: "John Doe"
     expected_status: 409
     expected_response:
       error: "email already exists"

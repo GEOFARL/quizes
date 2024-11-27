@@ -1,11 +1,17 @@
-import { PropsWithChildren } from 'react';
-import ThemeProvider from './ThemeProvider';
-import { TranslationProvider } from './TranslationProvider';
-import { Locale } from '@/types/locale';
+"use client";
+
+import { Locale } from "@/types/locale";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { PropsWithChildren } from "react";
+import ThemeProvider from "./ThemeProvider";
+import { TranslationProvider } from "./TranslationProvider";
+import { UserProvider } from "./UserProvider";
 
 type Props = { locale: Locale } & PropsWithChildren;
 
-const Providers: React.FC<Props> = async ({ children, locale }) => {
+const queryClient = new QueryClient();
+
+const Providers: React.FC<Props> = ({ children, locale }) => {
   return (
     <ThemeProvider
       attribute="class"
@@ -13,7 +19,11 @@ const Providers: React.FC<Props> = async ({ children, locale }) => {
       enableSystem
       disableTransitionOnChange
     >
-      <TranslationProvider locale={locale}>{children}</TranslationProvider>
+      <QueryClientProvider client={queryClient}>
+        <TranslationProvider locale={locale}>
+          <UserProvider>{children}</UserProvider>
+        </TranslationProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 };

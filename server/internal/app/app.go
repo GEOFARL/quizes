@@ -2,6 +2,7 @@ package app
 
 import (
 	"auth-service/internal/context"
+	"auth-service/internal/middleware"
 	"auth-service/internal/modules"
 	authModule "auth-service/internal/modules/auth"
 	"auth-service/internal/utils"
@@ -22,6 +23,10 @@ func New(ctx *context.Context) *App {
 	}
 }
 
+func (a *App) InitMiddleware() {
+	middleware.LoadCORS(a.Router, a.Context.Config)
+}
+
 func (a *App) RegisterModules(modules ...modules.Module) error {
 	for _, module := range modules {
 		if err := module.Init(); err != nil {
@@ -34,6 +39,8 @@ func (a *App) RegisterModules(modules ...modules.Module) error {
 
 func InitializeApp(ctx *context.Context) *App {
 	app := New(ctx)
+
+	app.InitMiddleware()
 
 	modules := []modules.Module{
 		authModule.New(ctx),

@@ -1,21 +1,25 @@
-'use client';
+"use client";
 import {
   DropdownMenu as BaseDropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '../../../ui/dropdown-menu';
-import UserAvatar from '../user/Avatar';
-import UserMenu from './Menu';
+} from "../../../ui/dropdown-menu";
+import UserAvatar from "../user/Avatar";
+import UserMenu from "./Menu";
 
-const DropdownMenu: React.FC = () => {
+type Props = {
+  user: string;
+};
+
+const DropdownMenu: React.FC<Props> = (props) => {
   return (
     <BaseDropdownMenu>
       <DropdownMenuTrigger>
-        <UserAvatar />
+        <UserAvatar {...props} />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-56" forceMount>
-        {<UserMenu />}
+        <UserMenu {...props} />
       </DropdownMenuContent>
     </BaseDropdownMenu>
   );

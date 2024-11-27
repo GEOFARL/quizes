@@ -12,6 +12,7 @@ type Config struct {
 	DBURI       string
 	DBName      string
 	JwtSecret   string
+	ClientURL   string
 	Collections *Collections
 	Routes      *RouteRegistry
 }
@@ -26,6 +27,7 @@ func LoadConfig() *Config {
 		DBURI:       getEnv("MONGO_URI", "mongodb://localhost:27017"),
 		DBName:      getEnv("DB_NAME", "myDB"),
 		JwtSecret:   getEnv("JWT_SECRET", "your_secret_key"),
+		ClientURL:   getEnv("CLIENT_URL", "http://localhost:3000"),
 		Collections: NewCollections(),
 		Routes:      NewRouteRegistry(),
 	}

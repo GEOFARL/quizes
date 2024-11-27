@@ -7,10 +7,11 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateJWT(userID, secret string) (string, error) {
+func GenerateJWT(user map[string]interface{}, secret string) (string, error) {
+	delete(user, "password")
 	claims := jwt.MapClaims{
-		"user_id": userID,
-		"exp":     time.Now().Add(24 * time.Hour).Unix(),
+		"user": user,
+		"exp":  time.Now().Add(24 * time.Hour).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedToken, err := token.SignedString([]byte(secret))
@@ -18,12 +19,11 @@ func GenerateJWT(userID, secret string) (string, error) {
 		Logger.WithError(err).Error("Failed to sign JWT")
 		return "", err
 	}
-	Logger.WithField("userID", userID).Info("JWT generated successfully")
-	Logger.WithField("token", signedToken).Info("JWT generated successfully")
+	Logger.WithField("user", user).Info("JWT generated successfully")
 	return signedToken, nil
 }
 
-func ValidateJWT(tokenString string, secret string) (jwt.MapClaims, error) {
+func ValidateJWT(tokenString string, secret string) (map[string]interface{}, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			Logger.Error("Unexpected signing method")
@@ -37,7 +37,7 @@ func ValidateJWT(tokenString string, secret string) (jwt.MapClaims, error) {
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		Logger.WithField("username", claims["user_id"]).Info("JWT validated successfully")
+		Logger.WithField("user", claims["user"]).Info("JWT validated successfully")
 		return claims, nil
 	}
 

@@ -15,6 +15,7 @@ services:
       - DB_NAME=${DB_NAME:-myDB}
       - JWT_SECRET=${JWT_SECRET:-supersecret}
       - PORT=${PORT:-8080}
+      - CLIENT_URL=${CLIENT_URL:-http://localhost:3000}
     depends_on:
       - mongo
     command: air

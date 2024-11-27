@@ -1,8 +1,8 @@
-import { getLocale, getTranslation } from '@/app/[locale]/dictionaries';
-import Link from 'next/link';
-import MaxWidthWrapper from '../../utils/MaxWidthWrapper';
-import DesktopNav from './DesktopNav';
-import MobileNav from './MobileNav';
+import { getLocale, getTranslation } from "@/app/[locale]/dictionaries";
+import Link from "next/link";
+import MaxWidthWrapper from "../../utils/MaxWidthWrapper";
+import DesktopNav from "./DesktopNav";
+import MobileNav from "./MobileNav";
 
 const Header: React.FC = async () => {
   const translation = await getTranslation();
