@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import PasswordInput from "../common/PasswordInput";
 
 type Props = {
   onSubmit: (payload: RegisterPayload) => void;
@@ -68,7 +69,7 @@ const RegisterForm: React.FC<Props> = ({ onSubmit }) => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="••••••••••" {...field} />
+                  <PasswordInput placeholder="••••••••••" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
