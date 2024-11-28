@@ -1,6 +1,7 @@
 "use client";
 
 import RegisterForm from "@/components/auth/RegisterForm";
+import ScreenWrapper from "@/components/auth/ScreenWrapper";
 import {
   Card,
   CardContent,
@@ -13,7 +14,7 @@ import useRegister from "@/hooks/auth/use-register";
 const RegisterScreen = () => {
   const register = useRegister();
   return (
-    <div className="mt-[125px]">
+    <ScreenWrapper>
       <Card className="max-w-[500px] mx-auto w-full">
         <CardHeader>
           <CardTitle>Register</CardTitle>
@@ -26,7 +27,7 @@ const RegisterScreen = () => {
           <RegisterForm onSubmit={register} />
         </CardContent>
       </Card>
-    </div>
+    </ScreenWrapper>
   );
 };
 

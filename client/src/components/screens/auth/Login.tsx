@@ -1,6 +1,7 @@
 "use client";
 
 import LoginForm from "@/components/auth/LoginForm";
+import ScreenWrapper from "@/components/auth/ScreenWrapper";
 import {
   Card,
   CardContent,
@@ -13,7 +14,7 @@ import useLogin from "@/hooks/auth/use-login";
 const LoginScreen = () => {
   const login = useLogin();
   return (
-    <div className="mt-[125px]">
+    <ScreenWrapper>
       <Card className="max-w-[500px] mx-auto w-full">
         <CardHeader>
           <CardTitle>Login</CardTitle>
@@ -26,7 +27,7 @@ const LoginScreen = () => {
           <LoginForm onSubmit={login} />
         </CardContent>
       </Card>
-    </div>
+    </ScreenWrapper>
   );
 };
 
