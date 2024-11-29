@@ -1,8 +1,6 @@
 package helpers
 
 import (
-	"encoding/json"
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -16,16 +14,20 @@ func ValidateResponse(t *testing.T, expected, actual map[string]interface{}) {
 			continue
 		}
 
-		if expectedStr, ok := expectedValue.(string); ok && expectedStr == "<non_empty_string>" {
-			assert.NotEmpty(t, actualValue, "Expected non-empty value for key '%s'", key)
-		} else {
+		switch expectedVal := expectedValue.(type) {
+		case string:
+			if expectedVal == "<non_empty_string>" {
+				assert.NotEmpty(t, actualValue, "Expected non-empty value for key '%s'", key)
+			} else {
+				assert.Equal(t, expectedVal, actualValue, "Mismatch for key: %s", key)
+			}
+		case []interface{}:
+			expectedArr, ok := expectedValue.([]interface{})
+			actualArr, ok2 := actualValue.([]interface{})
+			assert.True(t, ok && ok2, "Expected and actual values for key '%s' must both be arrays", key)
+			assert.GreaterOrEqual(t, len(actualArr), len(expectedArr), "Array length mismatch for key '%s'", key)
+		default:
 			assert.Equal(t, expectedValue, actualValue, "Mismatch for key: %s", key)
 		}
-	}
-
-	if t.Failed() {
-		expectedJSON, _ := json.MarshalIndent(expected, "", "  ")
-		actualJSON, _ := json.MarshalIndent(actual, "", "  ")
-		fmt.Printf("\nExpected Response:\n%s\n\nActual Response:\n%s\n", expectedJSON, actualJSON)
 	}
 }

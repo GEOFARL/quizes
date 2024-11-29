@@ -1,0 +1,34 @@
+tests:
+  - name: "Generate questions with valid text"
+    method: "POST"
+    endpoint: "/questions"
+    body:
+      text: "The Industrial Revolution, beginning in the late 18th century, marked a major turning point in history."
+    expected_status: 200
+    expected_response:
+      questions:
+        - id: "<non_empty_string>"
+          question: "<non_empty_string>"
+          type: "<non_empty_string>"
+          options: "<optional_array_of_strings>"
+          correctAnswers: "<non_empty_array_of_strings>"
+    pre_hooks:
+      - clearDatabase
+      - seedDatabase
+
+  - name: "Generate questions with empty text"
+    method: "POST"
+    endpoint: "/questions"
+    body:
+      text: ""
+    expected_status: 400
+    expected_response:
+      error: "Invalid input"
+
+  - name: "Generate questions without body"
+    method: "POST"
+    endpoint: "/questions"
+    body: {}
+    expected_status: 400
+    expected_response:
+      error: "Invalid input"

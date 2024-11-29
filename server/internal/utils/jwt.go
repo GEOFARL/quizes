@@ -19,7 +19,7 @@ func GenerateJWT(user map[string]interface{}, secret string) (string, error) {
 		Logger.WithError(err).Error("Failed to sign JWT")
 		return "", err
 	}
-	Logger.WithField("user", user).Info("JWT generated successfully")
+	Logger.WithField("user", user).WithField("token", signedToken).Info("JWT generated successfully")
 	return signedToken, nil
 }
 

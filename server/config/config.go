@@ -13,6 +13,8 @@ type Config struct {
 	DBName      string
 	JwtSecret   string
 	ClientURL   string
+	OpenAIKey   string
+	Environment string
 	Collections *Collections
 	Routes      *RouteRegistry
 }
@@ -28,6 +30,8 @@ func LoadConfig() *Config {
 		DBName:      getEnv("DB_NAME", "myDB"),
 		JwtSecret:   getEnv("JWT_SECRET", "your_secret_key"),
 		ClientURL:   getEnv("CLIENT_URL", "http://localhost:3000"),
+		OpenAIKey:   getEnv("OPENAI_API_KEY", ""),
+		Environment: getEnv("ENVIRONMENT", "development"),
 		Collections: NewCollections(),
 		Routes:      NewRouteRegistry(),
 	}

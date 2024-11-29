@@ -14,6 +14,9 @@ func NewTestContext() *context.Context {
 		JwtSecret:   "test_secret",
 		Collections: config.NewCollections(),
 		Routes:      config.NewRouteRegistry(),
+		ClientURL:   "http://localhost:3000",
+		OpenAIKey:   "",
+		Environment: "development",
 	}
 	utils.InitializeLogger()
 	db := utils.ConnectDB(cfg.DBURI)

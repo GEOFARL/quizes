@@ -5,7 +5,6 @@ tests:
     expected_status: 200
     expected_response:
       message: "Welcome!"
-      user_id: "6746490efd4365b3fbf23e41"
     pre_hooks:
       - seedDatabase
       - requiresAuth

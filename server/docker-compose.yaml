@@ -16,6 +16,8 @@ services:
       - JWT_SECRET=${JWT_SECRET:-supersecret}
       - PORT=${PORT:-8080}
       - CLIENT_URL=${CLIENT_URL:-http://localhost:3000}
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
     depends_on:
       - mongo
     command: air
