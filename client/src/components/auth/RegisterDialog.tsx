@@ -1,17 +1,22 @@
 "use client";
 
 import useRegister from "@/hooks/auth/use-register";
+import { Dictionary } from "@/types/dictionary";
 import Dialog from "./Dialog";
 import RegisterForm from "./RegisterForm";
 
-const RegisterDialog: React.FC = () => {
+type Props = {
+  translation: Dictionary;
+};
+
+const RegisterDialog: React.FC<Props> = ({ translation }) => {
   const register = useRegister();
   return (
     <Dialog
-      title="Register"
-      description="Enter your information to create an account"
+      title={translation?.auth.register.title}
+      description={translation?.auth.register.description}
     >
-      <RegisterForm onSubmit={register} />
+      <RegisterForm translation={translation} onSubmit={register} />
     </Dialog>
   );
 };

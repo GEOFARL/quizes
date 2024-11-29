@@ -11,8 +11,8 @@ import {
 import { useRouter } from "next/navigation";
 
 type Props = {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
 } & PropsWithChildren;
 
 const Dialog: React.FC<Props> = ({ children, title, description }) => {

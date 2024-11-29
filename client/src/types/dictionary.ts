@@ -1,20 +1,9 @@
-type Home = {
-  title: string;
-};
-type Global = {
-  auth: {
-    signOut: string;
-    signIn: string;
-    signUp: string;
-  };
-  theme: {
-    name: string;
-    light: string;
-    dark: string;
-  };
-  language: string;
-};
+import home from "../../public/dictionaries/en/home.json";
+import auth from "../../public/dictionaries/en/auth.json";
+import global from "../../public/dictionaries/en/global.json";
+
 export type Dictionary = {
-  home: Home;
-  global: Global;
+  home: typeof home;
+  global: typeof global;
+  auth: typeof auth;
 };

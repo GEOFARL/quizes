@@ -1,4 +1,5 @@
 "use client";
+import { Dictionary } from "@/types/dictionary";
 import {
   DropdownMenu as BaseDropdownMenu,
   DropdownMenuContent,
@@ -9,6 +10,7 @@ import UserMenu from "./Menu";
 
 type Props = {
   user: string;
+  translation: Dictionary;
 };
 
 const DropdownMenu: React.FC<Props> = (props) => {

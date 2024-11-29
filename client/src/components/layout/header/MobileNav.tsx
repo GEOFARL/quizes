@@ -13,12 +13,14 @@ import SignOut from "./actions/SignOut";
 import LanguageSelect from "./language/LanguageSelect";
 import ThemeSelect from "./theme/ThemeSelect";
 import UserInfo from "./user/Info";
+import { Dictionary } from "@/types/dictionary";
 
 type Props = {
   user?: string;
+  translation: Dictionary;
 };
 
-const MobileNav: React.FC<Props> = ({ user }) => {
+const MobileNav: React.FC<Props> = ({ user, translation }) => {
   return (
     <Sheet>
       <SheetTrigger asChild className="block sm:hidden">
@@ -39,11 +41,11 @@ const MobileNav: React.FC<Props> = ({ user }) => {
 
           {!user ? (
             <div className="flex flex-col gap-4 w-full">
-              <SignIn className="flex-1" />
-              <Register className="flex-1" />
+              <SignIn className="flex-1" translation={translation} />
+              <Register className="flex-1" translation={translation} />
             </div>
           ) : (
-            <SignOut />
+            <SignOut translation={translation} />
           )}
         </div>
       </SheetContent>

@@ -1,20 +1,28 @@
-import { Dictionary } from '@/types/dictionary';
-import { Locale } from '@/types/locale';
-import { cache } from 'react';
+import { Dictionary } from "@/types/dictionary";
+import { Locale } from "@/types/locale";
+import { cache } from "react";
 
 type DictionaryLoader = {
   [key in Locale]: () => Promise<Dictionary>;
 };
 
+const loadDictionary = async (lang: string): Promise<Dictionary> => {
+  const home = await import(`../../../public/dictionaries/${lang}/home.json`);
+  const global = await import(
+    `../../../public/dictionaries/${lang}/global.json`
+  );
+  const auth = await import(`../../../public/dictionaries/${lang}/auth.json`);
+
+  return {
+    home: home.default,
+    global: global.default,
+    auth: auth.default,
+  };
+};
+
 const dictionaries: DictionaryLoader = {
-  en: () =>
-    import('../../../public/dictionaries/en.json').then(
-      (module) => module.default
-    ),
-  uk: () =>
-    import('../../../public/dictionaries/uk.json').then(
-      (module) => module.default
-    ),
+  en: () => loadDictionary("en"),
+  uk: () => loadDictionary("uk"),
 };
 
 export const getDictionary = async (locale: Locale): Promise<Dictionary> => {
@@ -24,7 +32,7 @@ export const getDictionary = async (locale: Locale): Promise<Dictionary> => {
   return dictionaries[locale]();
 };
 
-const getStore = cache((): { value: Locale } => ({ value: 'en' }));
+const getStore = cache((): { value: Locale } => ({ value: "en" }));
 
 export const getLocale = (): Locale => getStore().value;
 export const setLocale = (value: Locale) => {

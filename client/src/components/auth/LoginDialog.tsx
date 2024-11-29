@@ -3,15 +3,20 @@
 import useLogin from "@/hooks/auth/use-login";
 import Dialog from "./Dialog";
 import LoginForm from "./LoginForm";
+import { Dictionary } from "@/types/dictionary";
 
-const LoginDialog: React.FC = () => {
+type Props = {
+  translation: Dictionary;
+};
+
+const LoginDialog: React.FC<Props> = ({ translation }) => {
   const login = useLogin();
   return (
     <Dialog
-      title="Login"
-      description="Enter your credentials to access your account"
+      title={translation?.auth.login.title}
+      description={translation?.auth.login.description}
     >
-      <LoginForm onSubmit={login} />
+      <LoginForm onSubmit={login} translation={translation} />
     </Dialog>
   );
 };

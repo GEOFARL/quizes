@@ -1,19 +1,30 @@
 "use client";
-import { useTranslation } from "@/components/providers/TranslationProvider";
-import { ButtonProps, buttonVariants } from "@/components/ui/button";
+import { Button, ButtonProps, buttonVariants } from "@/components/ui/button";
 import usePathWithLocale from "@/hooks/use-path-with-locale";
 import { cn } from "@/lib/utils";
+import { Dictionary } from "@/types/dictionary";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const SignIn: React.FC<ButtonProps> = ({ className }) => {
-  const translation = useTranslation();
+type Props = {
+  translation: Dictionary;
+} & ButtonProps;
+
+const SignIn: React.FC<Props> = ({ className, translation }) => {
+  const pathname = usePathname();
   const constructPath = usePathWithLocale();
-  return (
+
+  const loginPath = constructPath("/login");
+  return pathname === loginPath ? (
+    <Button className={cn(buttonVariants({ variant: "secondary" }), className)}>
+      {translation.global.auth.signIn}
+    </Button>
+  ) : (
     <Link
       href={constructPath("/login")}
       className={cn(buttonVariants({ variant: "secondary" }), className)}
     >
-      {translation?.global.auth.signIn}
+      {translation.global.auth.signIn}
     </Link>
   );
 };

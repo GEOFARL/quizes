@@ -1,8 +1,10 @@
 "use client";
 import { RegisterPayload } from "@/types/auth/payload";
+import { Dictionary } from "@/types/dictionary";
 import { registerSchema } from "@/validations/register";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import PasswordInput from "../common/PasswordInput";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -13,13 +15,13 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import PasswordInput from "../common/PasswordInput";
 
 type Props = {
   onSubmit: (payload: RegisterPayload) => void;
+  translation: Dictionary;
 };
 
-const RegisterForm: React.FC<Props> = ({ onSubmit }) => {
+const RegisterForm: React.FC<Props> = ({ onSubmit, translation }) => {
   const form = useForm<RegisterPayload>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -37,7 +39,9 @@ const RegisterForm: React.FC<Props> = ({ onSubmit }) => {
             name="fullName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Full name</FormLabel>
+                <FormLabel>
+                  {translation?.auth.register.form.fullName}
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="John Doe" {...field} />
                 </FormControl>
@@ -50,7 +54,7 @@ const RegisterForm: React.FC<Props> = ({ onSubmit }) => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{translation?.auth.register.form.email}</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -67,7 +71,9 @@ const RegisterForm: React.FC<Props> = ({ onSubmit }) => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>
+                  {translation?.auth.register.form.password}
+                </FormLabel>
                 <FormControl>
                   <PasswordInput placeholder="••••••••••" {...field} />
                 </FormControl>
@@ -78,7 +84,7 @@ const RegisterForm: React.FC<Props> = ({ onSubmit }) => {
         </div>
 
         <Button type="submit" className="w-full">
-          Register
+          {translation?.auth.register.form.button}
         </Button>
       </form>
     </Form>

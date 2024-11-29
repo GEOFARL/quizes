@@ -10,21 +10,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import useRegister from "@/hooks/auth/use-register";
+import { Dictionary } from "@/types/dictionary";
 
-const RegisterScreen = () => {
+type Props = {
+  translation: Dictionary;
+};
+
+const RegisterScreen: React.FC<Props> = ({ translation }) => {
   const register = useRegister();
   return (
     <ScreenWrapper>
       <Card className="max-w-[500px] mx-auto w-full">
         <CardHeader>
-          <CardTitle>Register</CardTitle>
+          <CardTitle>{translation.auth.register.title}</CardTitle>
           <CardDescription>
-            Enter your information to create an account
+            {translation.auth.register.description}
           </CardDescription>
         </CardHeader>
 
         <CardContent>
-          <RegisterForm onSubmit={register} />
+          <RegisterForm translation={translation} onSubmit={register} />
         </CardContent>
       </Card>
     </ScreenWrapper>

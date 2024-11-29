@@ -10,21 +10,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import useLogin from "@/hooks/auth/use-login";
+import { Dictionary } from "@/types/dictionary";
 
-const LoginScreen = () => {
+type Props = {
+  translation: Dictionary;
+};
+
+const LoginScreen: React.FC<Props> = ({ translation }) => {
   const login = useLogin();
   return (
     <ScreenWrapper>
       <Card className="max-w-[500px] mx-auto w-full">
         <CardHeader>
-          <CardTitle>Login</CardTitle>
+          <CardTitle>{translation.auth.login.title}</CardTitle>
           <CardDescription>
-            Enter your credentials to access your account
+            {translation.auth.login.description}
           </CardDescription>
         </CardHeader>
 
         <CardContent>
-          <LoginForm onSubmit={login} />
+          <LoginForm translation={translation} onSubmit={login} />
         </CardContent>
       </Card>
     </ScreenWrapper>

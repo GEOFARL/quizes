@@ -14,12 +14,14 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import PasswordInput from "../common/PasswordInput";
+import { Dictionary } from "@/types/dictionary";
 
 type Props = {
   onSubmit: (payload: LoginPayload) => void;
+  translation: Dictionary;
 };
 
-const LoginForm: React.FC<Props> = ({ onSubmit }) => {
+const LoginForm: React.FC<Props> = ({ onSubmit, translation }) => {
   const form = useForm<LoginPayload>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -36,7 +38,7 @@ const LoginForm: React.FC<Props> = ({ onSubmit }) => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{translation?.auth.login.form.email}</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -53,7 +55,7 @@ const LoginForm: React.FC<Props> = ({ onSubmit }) => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{translation?.auth.login.form.password}</FormLabel>
                 <FormControl>
                   <PasswordInput placeholder="••••••••••" {...field} />
                 </FormControl>
@@ -64,7 +66,7 @@ const LoginForm: React.FC<Props> = ({ onSubmit }) => {
         </div>
 
         <Button type="submit" className="w-full">
-          Login
+          {translation?.auth.login.form.button}
         </Button>
       </form>
     </Form>

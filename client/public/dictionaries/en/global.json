@@ -1,0 +1,13 @@
+{
+  "auth": {
+    "signOut": "Sign out",
+    "signIn": "Sign in",
+    "signUp": "Register"
+  },
+  "theme": {
+    "name": "Theme",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "language": "Language"
+}
