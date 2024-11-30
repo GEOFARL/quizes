@@ -10,16 +10,19 @@ type Props = {
   translation: Dictionary;
 } & ButtonProps;
 
-const Register: React.FC<Props> = ({ className, translation }) => {
+const Register: React.FC<Props> = ({ className, translation, variant }) => {
   const pathname = usePathname();
   const constructPath = usePathWithLocale();
   const registerPath = constructPath("/register");
   return pathname === registerPath ? (
-    <Button className={cn(buttonVariants(), className)}>
+    <Button className={cn(buttonVariants({ variant }), className)}>
       {translation.global.auth.signUp}
     </Button>
   ) : (
-    <Link href={registerPath} className={cn(buttonVariants(), className)}>
+    <Link
+      href={registerPath}
+      className={cn(buttonVariants({ variant }), className)}
+    >
       {translation.global.auth.signUp}
     </Link>
   );

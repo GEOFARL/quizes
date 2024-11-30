@@ -10,19 +10,33 @@ type Props = {
   translation: Dictionary;
 } & ButtonProps;
 
-const SignIn: React.FC<Props> = ({ className, translation }) => {
+const SignIn: React.FC<Props> = ({
+  className,
+  translation,
+  variant,
+  ...props
+}) => {
   const pathname = usePathname();
   const constructPath = usePathWithLocale();
 
   const loginPath = constructPath("/login");
   return pathname === loginPath ? (
-    <Button className={cn(buttonVariants({ variant: "secondary" }), className)}>
+    <Button
+      className={cn(
+        buttonVariants({ variant: variant ? variant : "secondary" }),
+        className
+      )}
+      {...props}
+    >
       {translation.global.auth.signIn}
     </Button>
   ) : (
     <Link
       href={constructPath("/login")}
-      className={cn(buttonVariants({ variant: "secondary" }), className)}
+      className={cn(
+        buttonVariants({ variant: variant ? variant : "secondary" }),
+        className
+      )}
     >
       {translation.global.auth.signIn}
     </Link>
