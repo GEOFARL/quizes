@@ -1,7 +1,6 @@
-import { BaseApi } from "./base-api";
 import { autobind } from "@/lib/autobind";
-import { GenerateQuestionsPayload } from "@/types/questions/payload";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
+import { BaseApi } from "./base-api";
 
 class QuestionsApi extends BaseApi {
   constructor() {
@@ -9,17 +8,12 @@ class QuestionsApi extends BaseApi {
     autobind(this);
   }
 
-  /**
-   * Generate questions based on the provided text
-   * @param payload The payload containing the text for generating questions
-   * @returns A response containing the generated questions
-   */
   async generateQuestions(
-    payload: GenerateQuestionsPayload
+    formData: FormData
   ): Promise<GenerateQuestionsResponse> {
     return this.fetch<GenerateQuestionsResponse>("questions", {
       method: "POST",
-      body: JSON.stringify(payload),
+      body: formData,
     });
   }
 }

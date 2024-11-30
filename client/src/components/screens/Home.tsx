@@ -1,7 +1,7 @@
 "use client";
 
 import Dialog from "@/components/features/auth/Dialog";
-import GenerateQuestionsForm from "@/components/features/questions/GenerateQuestionsForm";
+import GenerateQuestions from "@/components/features/questions/generate/GenerateQuestions";
 import Hero from "@/components/layout/Hero";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dictionary } from "@/types/dictionary";
@@ -29,7 +29,7 @@ const HomeScreen: React.FC<Props> = ({ translation }) => {
       <section className="mx-auto max-w-[1000px] px-4 md:px-8 w-full">
         <Card>
           <CardContent className="p-4 md:p-6 relative">
-            <GenerateQuestionsForm
+            <GenerateQuestions
               onSuccess={(data) => {
                 setDialogData(data);
                 setIsDialogOpen(true);
