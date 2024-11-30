@@ -1,7 +1,7 @@
 "use client";
 
-import LoginForm from "@/components/auth/LoginForm";
-import ScreenWrapper from "@/components/auth/ScreenWrapper";
+import LoginForm from "@/components/features/auth/LoginForm";
+import ScreenWrapper from "@/components/features/auth/ScreenWrapper";
 import {
   Card,
   CardContent,

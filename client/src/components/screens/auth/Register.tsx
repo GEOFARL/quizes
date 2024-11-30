@@ -1,7 +1,7 @@
 "use client";
 
-import RegisterForm from "@/components/auth/RegisterForm";
-import ScreenWrapper from "@/components/auth/ScreenWrapper";
+import RegisterForm from "@/components/features/auth/RegisterForm";
+import ScreenWrapper from "@/components/features/auth/ScreenWrapper";
 import {
   Card,
   CardContent,

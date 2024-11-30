@@ -1,4 +1,4 @@
-import LoginDialog from "@/components/auth/LoginDialog";
+import LoginDialog from "@/components/features/auth/LoginDialog";
 import { Locale } from "@/types/locale";
 import { getDictionary } from "../../dictionaries";
 

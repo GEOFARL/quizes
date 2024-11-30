@@ -1,11 +1,9 @@
 "use client";
-import { RegisterPayload } from "@/types/auth/payload";
-import { Dictionary } from "@/types/dictionary";
-import { registerSchema } from "@/validations/register";
+import { LoginPayload } from "@/types/auth/payload";
+import { loginSchema } from "@/validations/login";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import PasswordInput from "../common/PasswordInput";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import {
   Form,
   FormControl,
@@ -13,21 +11,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
+} from "../../ui/form";
+import { Input } from "../../ui/input";
+import PasswordInput from "../../common/PasswordInput";
+import { Dictionary } from "@/types/dictionary";
 
 type Props = {
-  onSubmit: (payload: RegisterPayload) => void;
+  onSubmit: (payload: LoginPayload) => void;
   translation: Dictionary;
 };
 
-const RegisterForm: React.FC<Props> = ({ onSubmit, translation }) => {
-  const form = useForm<RegisterPayload>({
-    resolver: zodResolver(registerSchema),
+const LoginForm: React.FC<Props> = ({ onSubmit, translation }) => {
+  const form = useForm<LoginPayload>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
-      fullName: "",
     },
   });
 
@@ -36,25 +35,10 @@ const RegisterForm: React.FC<Props> = ({ onSubmit, translation }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="space-y-2">
           <FormField
-            name="fullName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  {translation?.auth.register.form.fullName}
-                </FormLabel>
-                <FormControl>
-                  <Input placeholder="John Doe" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{translation?.auth.register.form.email}</FormLabel>
+                <FormLabel>{translation?.auth.login.form.email}</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -71,9 +55,7 @@ const RegisterForm: React.FC<Props> = ({ onSubmit, translation }) => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  {translation?.auth.register.form.password}
-                </FormLabel>
+                <FormLabel>{translation?.auth.login.form.password}</FormLabel>
                 <FormControl>
                   <PasswordInput placeholder="••••••••••" {...field} />
                 </FormControl>
@@ -84,11 +66,11 @@ const RegisterForm: React.FC<Props> = ({ onSubmit, translation }) => {
         </div>
 
         <Button type="submit" className="w-full">
-          {translation?.auth.register.form.button}
+          {translation?.auth.login.form.button}
         </Button>
       </form>
     </Form>
   );
 };
 
-export default RegisterForm;
+export default LoginForm;

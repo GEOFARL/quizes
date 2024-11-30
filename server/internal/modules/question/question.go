@@ -3,6 +3,7 @@ package question
 import (
 	"auth-service/internal/context"
 	handler "auth-service/internal/handlers/question"
+	"auth-service/internal/routes/questions"
 	service "auth-service/internal/services/question"
 
 	"github.com/gin-gonic/gin"
@@ -27,5 +28,5 @@ func (m *Module) Init() error {
 }
 
 func (m *Module) RegisterRoutes(router *gin.Engine) {
-	router.POST("/questions", m.handler.GenerateQuestions)
+	questions.Register(router, m.handler, m.context)
 }

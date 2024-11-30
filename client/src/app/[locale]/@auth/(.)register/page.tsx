@@ -1,4 +1,4 @@
-import RegisterDialog from "@/components/auth/RegisterDialog";
+import RegisterDialog from "@/components/features/auth/RegisterDialog";
 import { Locale } from "@/types/locale";
 import { getDictionary } from "../../dictionaries";
 
