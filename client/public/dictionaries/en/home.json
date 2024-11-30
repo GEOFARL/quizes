@@ -18,5 +18,46 @@
   "questions": {
     "title": "Generated Questions",
     "description": "Here are the questions generated from your input:"
+  },
+  "reviews": {
+    "title": "Our Reviews",
+    "list": [
+      {
+        "name": "Jack",
+        "username": "@jack",
+        "body": "This app is revolutionary! It has completely transformed the way I work. Highly recommend it!",
+        "img": "https://avatar.vercel.sh/jack"
+      },
+      {
+        "name": "Jill",
+        "username": "@jill",
+        "body": "I’ve never used anything so intuitive and powerful. This app is a game-changer for productivity.",
+        "img": "https://avatar.vercel.sh/jill"
+      },
+      {
+        "name": "John",
+        "username": "@john",
+        "body": "The features are incredible, and the interface is so user-friendly. I can’t imagine going back to anything else.",
+        "img": "https://avatar.vercel.sh/john"
+      },
+      {
+        "name": "Jane",
+        "username": "@jane",
+        "body": "This app is exactly what I’ve been looking for. It’s efficient, beautiful, and so easy to use.",
+        "img": "https://avatar.vercel.sh/jane"
+      },
+      {
+        "name": "Jenny",
+        "username": "@jenny",
+        "body": "I’m blown away by how much this app has helped me. It’s well-designed and incredibly effective.",
+        "img": "https://avatar.vercel.sh/jenny"
+      },
+      {
+        "name": "James",
+        "username": "@james",
+        "body": "Simply outstanding! This app combines everything I need into one seamless experience.",
+        "img": "https://avatar.vercel.sh/james"
+      }
+    ]
   }
 }

@@ -8,6 +8,7 @@ import { Dictionary } from "@/types/dictionary";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 import { useCallback, useState } from "react";
 import Questions from "../features/questions/Questions";
+import Reviews from "../layout/Reviews";
 
 type Props = {
   translation: Dictionary;
@@ -25,7 +26,6 @@ const HomeScreen: React.FC<Props> = ({ translation }) => {
   return (
     <main className="flex flex-col space-y-10 mt-12">
       <Hero translation={translation} />
-
       <section className="mx-auto max-w-[1000px] px-4 md:px-8 w-full">
         <Card>
           <CardContent className="p-4 md:p-6 relative">
@@ -39,6 +39,8 @@ const HomeScreen: React.FC<Props> = ({ translation }) => {
           </CardContent>
         </Card>
       </section>
+
+      <Reviews translation={translation} />
 
       {isDialogOpen && dialogData && (
         <Dialog
