@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Dictionary } from "@/types/dictionary";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 import { useCallback, useState } from "react";
+import Questions from "../features/questions/Questions";
 
 type Props = {
   translation: Dictionary;
@@ -47,9 +48,7 @@ const HomeScreen: React.FC<Props> = ({ translation }) => {
           onOpenChange={handleDialogClose}
           className="w-[90vw] md:max-w-[1200px] max-h-[85vh] overflow-auto"
         >
-          <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-md overflow-auto">
-            {JSON.stringify(dialogData, null, 2)}
-          </pre>
+          <Questions questions={dialogData.questions} />
         </Dialog>
       )}
     </main>
