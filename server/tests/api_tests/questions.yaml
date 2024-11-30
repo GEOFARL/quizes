@@ -1,9 +1,10 @@
 tests:
-  - name: "Generate questions with valid text"
+  - name: "Generate questions with a valid text file"
     method: "POST"
     endpoint: "/questions"
-    body:
-      text: "The Industrial Revolution, beginning in the late 18th century, marked a major turning point in history."
+    file:
+      path: "./test_data/valid_text_file.txt"
+      field: "file"
     expected_status: 200
     expected_response:
       questions:
@@ -12,23 +13,47 @@ tests:
           type: "<non_empty_string>"
           options: "<optional_array_of_strings>"
           correctAnswers: "<non_empty_array_of_strings>"
-    pre_hooks:
-      - clearDatabase
-      - seedDatabase
 
-  - name: "Generate questions with empty text"
+  - name: "Generate questions with a valid PDF file"
     method: "POST"
     endpoint: "/questions"
-    body:
-      text: ""
+    file:
+      path: "./test_data/valid_pdf_file.pdf"
+      field: "file"
+    expected_status: 200
+    expected_response:
+      questions:
+        - id: "<non_empty_string>"
+          question: "<non_empty_string>"
+          type: "<non_empty_string>"
+          options: "<optional_array_of_strings>"
+          correctAnswers: "<non_empty_array_of_strings>"
+
+  - name: "Generate questions with unsupported file type"
+    method: "POST"
+    endpoint: "/questions"
+    file:
+      path: "./test_data/unsupported_file_type.docx"
+      field: "file"
     expected_status: 400
     expected_response:
-      error: "Invalid input"
+      error: "unsupported file type. Only TXT and PDF are allowed"
 
-  - name: "Generate questions without body"
+  - name: "Generate questions with both text and file provided"
     method: "POST"
     endpoint: "/questions"
-    body: {}
+    file:
+      path: "./test_data/valid_text_file.txt"
+      field: "file"
+    body:
+      text: "Sample text"
+    expected_status: 400
+    expected_response:
+      error: "provide either text or a file, but not both"
+
+  - name: "Generate questions with no input"
+    method: "POST"
+    endpoint: "/questions"
     expected_status: 400
     expected_response:
       error: "Invalid input"

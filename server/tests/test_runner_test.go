@@ -4,6 +4,7 @@ import (
 	"auth-service/internal/app"
 	"auth-service/tests/helpers"
 	testsuite "auth-service/tests/test_suite"
+	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
@@ -55,7 +56,22 @@ func runTestSuite(t *testing.T, client *helpers.TestClient, filePath string) {
 				}
 			}
 
-			resp, respBody, err := client.DoRequest(testCase.Method, testCase.Endpoint, testCase.Body, testCase.Headers)
+			var resp *http.Response
+			var respBody map[string]interface{}
+			var err error
+
+			if testCase.File != nil {
+				resp, respBody, err = client.DoMultipartRequest(
+					testCase.Method,
+					testCase.Endpoint,
+					testCase.File.Path,
+					testCase.File.Field,
+					testCase.Body,
+				)
+			} else {
+				resp, respBody, err = client.DoRequest(testCase.Method, testCase.Endpoint, testCase.Body, testCase.Headers)
+			}
+
 			if err != nil {
 				t.Fatalf("Failed to execute request: %v", err)
 			}
