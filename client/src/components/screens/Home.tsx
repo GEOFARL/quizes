@@ -28,7 +28,7 @@ const HomeScreen: React.FC<Props> = ({ translation }) => {
 
       <section className="mx-auto max-w-[1000px] px-4 md:px-8 w-full">
         <Card>
-          <CardContent className="p-4 md:p-6">
+          <CardContent className="p-4 md:p-6 relative">
             <GenerateQuestionsForm
               onSuccess={(data) => {
                 setDialogData(data);

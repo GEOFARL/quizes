@@ -6,7 +6,14 @@
   },
   "generate-question-form": {
     "input-placeholder": "Type your message here",
-    "button": "Send"
+    "button": "Send",
+    "switch": "File / Text",
+    "dnd": {
+      "default": "Drag and drop your file here or click to browse",
+      "active": "Drop the file here...",
+      "disabled": "Only one file is allowed",
+      "remove": "Remove"
+    }
   },
   "questions": {
     "title": "Generated Questions",
