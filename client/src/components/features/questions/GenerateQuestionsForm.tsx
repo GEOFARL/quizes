@@ -58,8 +58,8 @@ const GenerateQuestionsForm: React.FC<Props> = ({ onSuccess, translation }) => {
 
   return (
     <div>
-      <div className="absolute top-[4px] right-[4px] p-2 bg-gray-100 flex items-center gap-2 rounded-md shadow border-2 z-10">
-        <Label htmlFor="file-text">
+      <div className="absolute top-[4px] right-[4px] p-2 bg-gray-100 dark:bg-gray-800 flex items-center gap-2 rounded-md shadow border-2 border-gray-300 dark:border-gray-600 z-10">
+        <Label htmlFor="file-text" className="text-gray-700 dark:text-gray-300">
           {translation.home["generate-question-form"].switch}
         </Label>
         <Switch id="file-text" onCheckedChange={setIsText} />

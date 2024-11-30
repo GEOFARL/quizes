@@ -71,7 +71,7 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({
     return Object.entries(accept).map(([mimeType, extensions], index) => (
       <div
         key={index}
-        className="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm mr-2 mt-2"
+        className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full text-sm mr-2 mt-2"
       >
         {extensions.join(", ")} ({mimeType})
       </div>
@@ -85,13 +85,13 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({
         className={cn(
           "border-2 border-dashed rounded-md p-6 text-center transition cursor-pointer h-full grid content-center flex-1 min-h-[250px]",
           isDragActive
-            ? "border-sky-400 bg-sky-50"
-            : "border-gray-300 bg-gray-50",
+            ? "border-sky-400 bg-sky-50 dark:bg-sky-900"
+            : "border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800",
           files.length > 0 && !multiple ? "cursor-not-allowed opacity-50" : ""
         )}
       >
         <input {...getInputProps()} />
-        <p className="text-gray-500">
+        <p className="text-gray-500 dark:text-gray-300">
           {files.length > 0 && !multiple
             ? dropzoneText.disabled
             : isDragActive
