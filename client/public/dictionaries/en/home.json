@@ -30,6 +30,7 @@
       },
       "difficulty": "Difficulty",
       "difficultyLevels": ["Easy", "Medium", "Hard", "Very Hard", "Expert"],
+      "includeExplanations": "Include Explanations",
       "questionTypes": {
         "title": "Question Types",
         "types": {
@@ -42,7 +43,9 @@
   },
   "questions": {
     "title": "Generated Questions",
-    "description": "Here are the questions generated from your input:"
+    "description": "Here are the questions generated from your input:",
+    "question": "Question",
+    "explanation": "Explanation"
   },
   "reviews": {
     "title": "Our Reviews",

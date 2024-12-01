@@ -5,5 +5,6 @@ export interface GenerateQuestionsResponse {
     type: "single-choice" | "multiple-choice" | "true-false";
     options?: string[];
     correctAnswers: string[];
+    explanation?: string;
   }>;
 }

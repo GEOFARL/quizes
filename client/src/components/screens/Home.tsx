@@ -54,7 +54,10 @@ const HomeScreen: React.FC<Props> = ({ translation, user }) => {
           onOpenChange={handleDialogClose}
           className="w-[90vw] md:max-w-[1200px] max-h-[85vh] overflow-auto"
         >
-          <Questions questions={dialogData.questions} />
+          <Questions
+            questions={dialogData.questions}
+            translation={translation}
+          />
         </Dialog>
       )}
     </main>

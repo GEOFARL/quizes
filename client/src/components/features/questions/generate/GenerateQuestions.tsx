@@ -28,6 +28,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
+import { usePathname } from "next/navigation";
 
 type Props = {
   onSuccess?: (data: GenerateQuestionsResponse) => void;
@@ -65,6 +67,11 @@ const GenerateQuestionsForm: React.FC<Props> = ({
     "multiple-choice",
     "true-false",
   ]);
+  const [includeExplanations, setIncludeExplanations] = useState(false);
+
+  const pathname = usePathname();
+  const locale = pathname.split("/")[1];
+
   const deserializedUser = User.fromString(user);
 
   const toggleQuestionType = (type: string) => {
@@ -93,9 +100,19 @@ const GenerateQuestionsForm: React.FC<Props> = ({
         ]
       );
       questionTypes.forEach((type) => formData.append("questionTypes[]", type));
+      formData.append("includeExplanations", includeExplanations.toString());
+      formData.append("locale", locale);
       mutation.mutate(formData);
     },
-    [numQuestions, difficulty, questionTypes, mutation, translation]
+    [
+      numQuestions,
+      difficulty,
+      questionTypes,
+      includeExplanations,
+      locale,
+      mutation,
+      translation,
+    ]
   );
 
   return (
@@ -145,6 +162,8 @@ const GenerateQuestionsForm: React.FC<Props> = ({
                 </div>
               </div>
 
+              <Separator />
+
               <div className="flex items-center gap-2">
                 <Label htmlFor="difficulty" className="w-full max-w-[95px]">
                   {
@@ -170,6 +189,8 @@ const GenerateQuestionsForm: React.FC<Props> = ({
                 </Select>
               </div>
 
+              <Separator />
+
               <div className="space-y-2">
                 <Label>
                   {
@@ -193,6 +214,25 @@ const GenerateQuestionsForm: React.FC<Props> = ({
                     </div>
                   )
                 )}
+              </div>
+
+              <Separator />
+
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  checked={includeExplanations}
+                  onCheckedChange={(checked) =>
+                    setIncludeExplanations(
+                      checked === "indeterminate" ? false : checked
+                    )
+                  }
+                />
+                <Label>
+                  {
+                    translation.home["generate-question-form"].options
+                      .includeExplanations
+                  }
+                </Label>
               </div>
             </div>
           </PopoverContent>

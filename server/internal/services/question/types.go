@@ -6,6 +6,7 @@ type Question struct {
 	Type           string   `json:"type"`
 	Options        []string `json:"options,omitempty"`
 	CorrectAnswers []string `json:"correctAnswers"`
+	Explanation    string   `json:"explanation,omitempty"`
 }
 
 type MockResponse struct {
