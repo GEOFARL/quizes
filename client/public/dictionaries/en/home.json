@@ -20,6 +20,14 @@
     "overlay": {
       "title": "Log in / Register",
       "subtitle": "to use question generation"
+    },
+    "options": {
+      "menu": "Options",
+      "numQuestions": "Number of Questions",
+      "questionsForms": {
+        "forms": ["question", "questions"],
+        "ruleKey": "en"
+      }
     }
   },
   "questions": {

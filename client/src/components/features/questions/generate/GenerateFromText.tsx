@@ -1,6 +1,5 @@
 "use client";
 
-import { questionsApi } from "@/api/questions-api";
 import { useUserContext } from "@/components/providers/UserProvider";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,19 +10,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import getToken from "@/lib/getToken";
 import { Dictionary } from "@/types/dictionary";
 import { GenerateQuestionsPayload } from "@/types/questions/payload";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 import { generateQuestionsSchema } from "@/validations/generate-questions";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import ManageQuestions from "./ManageQuestions";
 
 type Props = {
-  onSuccess?: (data: GenerateQuestionsResponse) => void;
+  onSubmit: (data: FormData) => void;
+  isLoading: boolean;
   translation: Dictionary;
   questions: GenerateQuestionsResponse["questions"] | null;
   resetQuestions: () => void;
@@ -31,7 +29,8 @@ type Props = {
 };
 
 const GenerateFromText: React.FC<Props> = ({
-  onSuccess,
+  onSubmit,
+  isLoading,
   translation,
   questions,
   openQuestions,
@@ -46,30 +45,20 @@ const GenerateFromText: React.FC<Props> = ({
     mode: "onSubmit",
   });
 
-  const mutation = useMutation({
-    mutationFn: async (data: FormData) => {
-      return questionsApi.generateQuestions(data, await getToken());
-    },
-    onSuccess: (data) => {
-      console.log("Generated questions:", data);
-      onSuccess?.(data);
-    },
-  });
-
-  const onSubmit = useCallback(
+  const handleSubmit = useCallback(
     (values: GenerateQuestionsPayload) => {
       const formData = new FormData();
       formData.append("text", values.text);
 
-      mutation.mutate(formData);
+      onSubmit(formData);
       form.reset();
     },
-    [form, mutation]
+    [form, onSubmit]
   );
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <div className="space-y-2">
           <FormField
             name="text"
@@ -98,11 +87,9 @@ const GenerateFromText: React.FC<Props> = ({
             <Button
               type="submit"
               className="px-8"
-              disabled={
-                !user || mutation.isPending || form.getValues().text === ""
-              }
+              disabled={!user || isLoading || form.getValues().text === ""}
             >
-              {mutation.isPending
+              {isLoading
                 ? translation.home["generate-question-form"]["button-loading"]
                 : translation.home["generate-question-form"].button}
             </Button>

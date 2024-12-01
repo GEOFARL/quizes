@@ -13,18 +13,18 @@ func New(openAI OpenAIClient, environment string) *Service {
 	return &Service{openAI: openAI, environment: environment}
 }
 
-func (s *Service) GenerateQuestions(text string) ([]Question, error) {
+func (s *Service) GenerateQuestions(text string, numQuestions int) ([]Question, error) {
 	if s.environment == "development" {
 		return GetMockQuestions(), nil
 	}
 
-	prompt := s.buildPrompt(text)
+	prompt := s.buildPrompt(text, numQuestions)
 	return s.openAI.GenerateQuestions(prompt)
 }
 
-func (s *Service) buildPrompt(text string) string {
+func (s *Service) buildPrompt(text string, numQuestions int) string {
 	return fmt.Sprintf(`
-Generate a list of questions based on the following text in a structured JSON format. 
+Generate a list of %d questions based on the following text in a structured JSON format. 
 Each question should have the following fields:
 - id: A unique identifier (string)
 - question: The question text (string)
@@ -58,5 +58,5 @@ Example JSON format:
 ]
 
 Based on the text:
-%s`, text)
+%s`, numQuestions, text)
 }

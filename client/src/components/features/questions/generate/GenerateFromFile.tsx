@@ -1,19 +1,17 @@
 "use client";
 
-import { questionsApi } from "@/api/questions-api";
 import { useUserContext } from "@/components/providers/UserProvider";
 import { Button } from "@/components/ui/button";
-import getToken from "@/lib/getToken";
 import { Dictionary } from "@/types/dictionary";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
-import { useMutation } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
 import FileDropzone from "../../../common/FileDropzone";
 import ManageQuestions from "./ManageQuestions";
 
 type Props = {
   translation: Dictionary;
-  onSuccess?: (data: GenerateQuestionsResponse) => void;
+  onSubmit: (data: FormData) => void;
+  isLoading: boolean;
   questions: GenerateQuestionsResponse["questions"] | null;
   resetQuestions: () => void;
   openQuestions: () => void;
@@ -21,7 +19,8 @@ type Props = {
 
 const GenerateFromFile: React.FC<Props> = ({
   translation,
-  onSuccess,
+  onSubmit,
+  isLoading,
   questions,
   resetQuestions,
   openQuestions,
@@ -29,21 +28,6 @@ const GenerateFromFile: React.FC<Props> = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [areFilesRemoved, setAreFilesRemoved] = useState(false);
   const { user } = useUserContext();
-
-  const mutation = useMutation({
-    mutationFn: async (data: FormData) => {
-      return questionsApi.generateQuestions(data, await getToken());
-    },
-    onSuccess: (data) => {
-      console.log("Generated questions:", data);
-      setSelectedFile(null);
-      setAreFilesRemoved(true);
-      onSuccess?.(data);
-    },
-    onError: (error) => {
-      console.error("Error generating questions:", error);
-    },
-  });
 
   const handleSubmit = useCallback(() => {
     if (!selectedFile) {
@@ -54,8 +38,8 @@ const GenerateFromFile: React.FC<Props> = ({
     const formData = new FormData();
     formData.append("file", selectedFile);
 
-    mutation.mutate(formData);
-  }, [mutation, selectedFile]);
+    onSubmit(formData);
+  }, [onSubmit, selectedFile]);
 
   return (
     <div className="space-y-2">
@@ -84,9 +68,9 @@ const GenerateFromFile: React.FC<Props> = ({
             type="button"
             onClick={handleSubmit}
             className="px-8"
-            disabled={!user || mutation.isPending || !selectedFile}
+            disabled={!user || isLoading || !selectedFile}
           >
-            {mutation.isPending
+            {isLoading
               ? translation.home["generate-question-form"]["button-loading"]
               : translation.home["generate-question-form"].button}
           </Button>
