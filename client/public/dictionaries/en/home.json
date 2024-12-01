@@ -27,6 +27,16 @@
       "questionsForms": {
         "forms": ["question", "questions"],
         "ruleKey": "en"
+      },
+      "difficulty": "Difficulty",
+      "difficultyLevels": ["Easy", "Medium", "Hard", "Very Hard", "Expert"],
+      "questionTypes": {
+        "title": "Question Types",
+        "types": {
+          "single-choice": "Single Choice",
+          "multiple-choice": "Multiple Choice",
+          "true-false": "True/False"
+        }
       }
     }
   },

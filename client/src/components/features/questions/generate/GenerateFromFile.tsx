@@ -76,7 +76,10 @@ const GenerateFromFile: React.FC<Props> = ({
           </Button>
         ) : (
           <ManageQuestions
-            resetQuestions={resetQuestions}
+            resetQuestions={() => {
+              setAreFilesRemoved(true);
+              resetQuestions();
+            }}
             openQuestions={openQuestions}
             translation={translation}
           />

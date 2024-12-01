@@ -51,9 +51,8 @@ const GenerateFromText: React.FC<Props> = ({
       formData.append("text", values.text);
 
       onSubmit(formData);
-      form.reset();
     },
-    [form, onSubmit]
+    [onSubmit]
   );
 
   return (
@@ -95,7 +94,10 @@ const GenerateFromText: React.FC<Props> = ({
             </Button>
           ) : (
             <ManageQuestions
-              resetQuestions={resetQuestions}
+              resetQuestions={() => {
+                form.reset();
+                resetQuestions();
+              }}
               openQuestions={openQuestions}
               translation={translation}
             />

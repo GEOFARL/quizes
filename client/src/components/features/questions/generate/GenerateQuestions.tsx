@@ -20,6 +20,14 @@ import GenerateFromFile from "./GenerateFromFile";
 import GenerateFromText from "./GenerateFromText";
 import UnauthorizedOverlay from "./UnauthorizedOverlay";
 import { pluralize } from "@/lib/pluralize";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type Props = {
   onSuccess?: (data: GenerateQuestionsResponse) => void;
@@ -51,7 +59,19 @@ const GenerateQuestionsForm: React.FC<Props> = ({
 }) => {
   const [isText, setIsText] = useState(false);
   const [numQuestions, setNumQuestions] = useState(5);
+  const [difficulty, setDifficulty] = useState<string>("1");
+  const [questionTypes, setQuestionTypes] = useState<string[]>([
+    "single-choice",
+    "multiple-choice",
+    "true-false",
+  ]);
   const deserializedUser = User.fromString(user);
+
+  const toggleQuestionType = (type: string) => {
+    setQuestionTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+    );
+  };
 
   const mutation = useMutation({
     mutationFn: async (formData: FormData) => {
@@ -66,9 +86,16 @@ const GenerateQuestionsForm: React.FC<Props> = ({
   const handleSubmit = useCallback(
     (formData: FormData) => {
       formData.append("numQuestions", numQuestions.toString());
+      formData.append(
+        "difficulty",
+        translation.home["generate-question-form"].options.difficultyLevels[
+          parseInt(difficulty) - 1
+        ]
+      );
+      questionTypes.forEach((type) => formData.append("questionTypes[]", type));
       mutation.mutate(formData);
     },
-    [numQuestions, mutation]
+    [numQuestions, difficulty, questionTypes, mutation, translation]
   );
 
   return (
@@ -93,7 +120,7 @@ const GenerateQuestionsForm: React.FC<Props> = ({
           <PopoverContent className="w-[300px]">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Label htmlFor="num-questions">
+                <Label htmlFor="num-questions" className="w-full max-w-[95px]">
                   {
                     translation.home["generate-question-form"].options
                       .numQuestions
@@ -116,6 +143,56 @@ const GenerateQuestionsForm: React.FC<Props> = ({
                     )}
                   </p>
                 </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Label htmlFor="difficulty" className="w-full max-w-[95px]">
+                  {
+                    translation.home["generate-question-form"].options
+                      .difficulty
+                  }
+                </Label>
+                <Select value={difficulty} onValueChange={setDifficulty}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select difficulty" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {translation.home[
+                      "generate-question-form"
+                    ].options.difficultyLevels.map(
+                      (level: string, index: number) => (
+                        <SelectItem key={index} value={(index + 1).toString()}>
+                          {level}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>
+                  {
+                    translation.home["generate-question-form"].options
+                      .questionTypes.title
+                  }
+                </Label>
+                {["single-choice", "multiple-choice", "true-false"].map(
+                  (type) => (
+                    <div key={type} className="flex items-center gap-2">
+                      <Checkbox
+                        checked={questionTypes.includes(type)}
+                        onCheckedChange={() => toggleQuestionType(type)}
+                      />
+                      <Label>
+                        {
+                          translation.home["generate-question-form"].options
+                            .questionTypes.types[type as "single-choice"]
+                        }
+                      </Label>
+                    </div>
+                  )
+                )}
               </div>
             </div>
           </PopoverContent>

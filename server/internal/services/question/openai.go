@@ -60,7 +60,8 @@ func (o *OpenAIService) GenerateQuestions(prompt string) ([]Question, error) {
 }
 
 func cleanResponse(response string) string {
-	cleaned := strings.Trim(response, "`")
-	cleaned = strings.Replace(cleaned, "json", "", 1)
+	cleaned := strings.TrimSpace(response)
+	cleaned = strings.TrimPrefix(cleaned, "```json")
+	cleaned = strings.TrimSuffix(cleaned, "```")
 	return strings.TrimSpace(cleaned)
 }

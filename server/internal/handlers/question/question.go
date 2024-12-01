@@ -26,9 +26,11 @@ func NewHandler(service *question.Service) *Handler {
 }
 
 type QuestionRequest struct {
-	Text         string                `form:"text" binding:"omitempty"`
-	File         *multipart.FileHeader `form:"file" binding:"omitempty"`
-	NumQuestions int                   `form:"numQuestions" binding:"omitempty"`
+	Text          string                `form:"text" binding:"omitempty"`
+	File          *multipart.FileHeader `form:"file" binding:"omitempty"`
+	NumQuestions  int                   `form:"numQuestions" binding:"omitempty"`
+	Difficulty    string                `form:"difficulty" binding:"omitempty"`
+	QuestionTypes []string              `form:"questionTypes[]" binding:"omitempty"`
 }
 
 type QuestionResponse struct {
@@ -45,9 +47,11 @@ func (h *Handler) GenerateQuestions(c *gin.Context) {
 	}
 
 	utils.Logger.WithFields(logrus.Fields{
-		"text_provided": req.Text != "",
-		"file_provided": req.File != nil,
-		"num_questions": req.NumQuestions,
+		"text_provided":  req.Text != "",
+		"file_provided":  req.File != nil,
+		"num_questions":  req.NumQuestions,
+		"difficulty":     req.Difficulty,
+		"question_types": req.QuestionTypes,
 	}).Debug("Validating request inputs")
 
 	text, err := h.getTextFromRequest(req)
@@ -62,7 +66,7 @@ func (h *Handler) GenerateQuestions(c *gin.Context) {
 		"num_questions":         req.NumQuestions,
 	}).Info("Text extracted successfully")
 
-	questions, err := h.questionService.GenerateQuestions(text, req.NumQuestions)
+	questions, err := h.questionService.GenerateQuestions(text, req.NumQuestions, req.Difficulty, req.QuestionTypes)
 	if err != nil {
 		utils.Logger.WithError(err).Error("Failed to generate questions")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

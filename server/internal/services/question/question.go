@@ -2,6 +2,7 @@ package question
 
 import (
 	"fmt"
+	"strings"
 )
 
 type Service struct {
@@ -13,22 +14,28 @@ func New(openAI OpenAIClient, environment string) *Service {
 	return &Service{openAI: openAI, environment: environment}
 }
 
-func (s *Service) GenerateQuestions(text string, numQuestions int) ([]Question, error) {
+func (s *Service) GenerateQuestions(text string, numQuestions int, difficulty string, questionTypes []string) ([]Question, error) {
 	if s.environment == "development" {
 		return GetMockQuestions(), nil
 	}
 
-	prompt := s.buildPrompt(text, numQuestions)
+	prompt := s.buildPrompt(text, numQuestions, difficulty, questionTypes)
 	return s.openAI.GenerateQuestions(prompt)
 }
 
-func (s *Service) buildPrompt(text string, numQuestions int) string {
+func (s *Service) buildPrompt(text string, numQuestions int, difficulty string, questionTypes []string) string {
+	typesDescription := "any type"
+	if len(questionTypes) > 0 {
+		typesDescription = strings.Join(questionTypes, ", ")
+	}
+
 	return fmt.Sprintf(`
-Generate a list of %d questions based on the following text in a structured JSON format. 
+Generate a list of %d questions of the following types: %s, based on the provided text with a difficulty of %s. 
+The output should be in a structured JSON format. 
 Each question should have the following fields:
 - id: A unique identifier (string)
 - question: The question text (string)
-- type: The type of the question ("single-choice", "multiple-choice", "true-false")
+- type: The type of the question ("%s")
 - options: (array of strings, required for "single-choice" and "multiple-choice", leave empty for "true-false")
 - correctAnswers: (array of strings, required for "multiple-choice" and "true-false" to specify correct answers, for "single-choice" only include one correct answer)
 
@@ -58,5 +65,5 @@ Example JSON format:
 ]
 
 Based on the text:
-%s`, numQuestions, text)
+%s`, numQuestions, typesDescription, difficulty, strings.Join(questionTypes, `", "`), text)
 }

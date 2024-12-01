@@ -27,6 +27,16 @@
       "questionsForms": {
         "forms": ["запитання", "запитання", "запитань"],
         "ruleKey": "uk"
+      },
+      "difficulty": "Складність",
+      "difficultyLevels": ["Легко", "Середньо", "Важко", "Дуже важко", "Експерт"],
+      "questionTypes": {
+        "title": "Типи Запитань",
+        "types": {
+          "single-choice": "Один Варіант",
+          "multiple-choice": "Кілька Варіантів",
+          "true-false": "Правда/Неправда"
+        }
       }
     }
   },

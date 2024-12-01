@@ -17,9 +17,9 @@ const TrueFalse: React.FC<Props> = ({ question }) => {
           <div
             className={cn(
               "w-full px-4 py-2 rounded-md cursor-pointer",
-              "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600",
+              "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-800",
               {
-                "bg-gray-400 dark:bg-green-600":
+                "bg-gray-400 dark:bg-green-600 hover:bg-gray-500 dark:hover:bg-green-700":
                   question.correctAnswers[0] === option,
               }
             )}
