@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import getToken from "@/lib/getToken";
 import { Dictionary } from "@/types/dictionary";
 import { GenerateQuestionsPayload } from "@/types/questions/payload";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
@@ -36,7 +37,9 @@ const GenerateFromText: React.FC<Props> = ({ onSuccess, translation }) => {
   });
 
   const mutation = useMutation({
-    mutationFn: questionsApi.generateQuestions,
+    mutationFn: async (data: FormData) => {
+      return questionsApi.generateQuestions(data, await getToken());
+    },
     onSuccess: (data) => {
       console.log("Generated questions:", data);
       onSuccess?.(data);
@@ -84,7 +87,9 @@ const GenerateFromText: React.FC<Props> = ({ onSuccess, translation }) => {
           <Button
             type="submit"
             className="px-8"
-            disabled={!user || mutation.isPending}
+            disabled={
+              !user || mutation.isPending || form.getValues().text === ""
+            }
           >
             {mutation.isPending
               ? translation.home["generate-question-form"]["button-loading"]

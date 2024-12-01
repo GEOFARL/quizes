@@ -2,22 +2,27 @@
 
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { User } from "@/lib/user/user";
 import { Dictionary } from "@/types/dictionary";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 import { useState } from "react";
 import GenerateFromFile from "./GenerateFromFile";
 import GenerateFromText from "./GenerateFromText";
 import UnauthorizedOverlay from "./UnauthorizedOverlay";
-import { useUserContext } from "@/components/providers/UserProvider";
 
 type Props = {
   onSuccess?: (data: GenerateQuestionsResponse) => void;
   translation: Dictionary;
+  user: string;
 };
 
-const GenerateQuestionsForm: React.FC<Props> = ({ onSuccess, translation }) => {
+const GenerateQuestionsForm: React.FC<Props> = ({
+  onSuccess,
+  translation,
+  user,
+}) => {
   const [isText, setIsText] = useState(false);
-  const { user } = useUserContext();
+  const deserializedUser = User.fromString(user);
 
   return (
     <div>
@@ -32,7 +37,7 @@ const GenerateQuestionsForm: React.FC<Props> = ({ onSuccess, translation }) => {
       ) : (
         <GenerateFromFile translation={translation} onSuccess={onSuccess} />
       )}
-      {!user && <UnauthorizedOverlay translation={translation} />}
+      {!deserializedUser && <UnauthorizedOverlay translation={translation} />}
     </div>
   );
 };

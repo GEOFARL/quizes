@@ -12,9 +12,10 @@ import Reviews from "../layout/Reviews";
 
 type Props = {
   translation: Dictionary;
+  user: string;
 };
 
-const HomeScreen: React.FC<Props> = ({ translation }) => {
+const HomeScreen: React.FC<Props> = ({ translation, user }) => {
   const [dialogData, setDialogData] =
     useState<GenerateQuestionsResponse | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -35,6 +36,7 @@ const HomeScreen: React.FC<Props> = ({ translation }) => {
                 setIsDialogOpen(true);
               }}
               translation={translation}
+              user={user}
             />
           </CardContent>
         </Card>

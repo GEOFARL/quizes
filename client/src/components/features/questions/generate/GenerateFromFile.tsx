@@ -1,13 +1,14 @@
 "use client";
 
 import { questionsApi } from "@/api/questions-api";
+import { useUserContext } from "@/components/providers/UserProvider";
 import { Button } from "@/components/ui/button";
+import getToken from "@/lib/getToken";
 import { Dictionary } from "@/types/dictionary";
+import { GenerateQuestionsResponse } from "@/types/questions/response";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import FileDropzone from "../../../common/FileDropzone";
-import { GenerateQuestionsResponse } from "@/types/questions/response";
-import { useUserContext } from "@/components/providers/UserProvider";
 
 type Props = {
   translation: Dictionary;
@@ -19,7 +20,9 @@ const GenerateFromFile: React.FC<Props> = ({ translation, onSuccess }) => {
   const { user } = useUserContext();
 
   const mutation = useMutation({
-    mutationFn: questionsApi.generateQuestions,
+    mutationFn: async (data: FormData) => {
+      return questionsApi.generateQuestions(data, await getToken());
+    },
     onSuccess: (data) => {
       console.log("Generated questions:", data);
       onSuccess?.(data);

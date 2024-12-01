@@ -9,11 +9,13 @@ class QuestionsApi extends BaseApi {
   }
 
   async generateQuestions(
-    formData: FormData
+    formData: FormData,
+    token?: string
   ): Promise<GenerateQuestionsResponse> {
     return this.fetch<GenerateQuestionsResponse>("questions", {
       method: "POST",
       body: formData,
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
   }
 }
