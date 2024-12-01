@@ -1,6 +1,7 @@
 "use client";
 
 import { questionsApi } from "@/api/questions-api";
+import { useUserContext } from "@/components/providers/UserProvider";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -25,6 +26,7 @@ type Props = {
 };
 
 const GenerateFromText: React.FC<Props> = ({ onSuccess, translation }) => {
+  const { user } = useUserContext();
   const form = useForm<GenerateQuestionsPayload>({
     resolver: zodResolver(generateQuestionsSchema),
     defaultValues: {
@@ -79,7 +81,11 @@ const GenerateFromText: React.FC<Props> = ({ onSuccess, translation }) => {
         </div>
 
         <div className="flex justify-end">
-          <Button type="submit" className="px-8">
+          <Button
+            type="submit"
+            className="px-8"
+            disabled={!user || mutation.isPending}
+          >
             {mutation.isPending
               ? translation.home["generate-question-form"]["button-loading"]
               : translation.home["generate-question-form"].button}

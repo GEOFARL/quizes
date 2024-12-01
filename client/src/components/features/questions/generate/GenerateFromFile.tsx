@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import FileDropzone from "../../../common/FileDropzone";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
+import { useUserContext } from "@/components/providers/UserProvider";
 
 type Props = {
   translation: Dictionary;
@@ -15,6 +16,7 @@ type Props = {
 
 const GenerateFromFile: React.FC<Props> = ({ translation, onSuccess }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { user } = useUserContext();
 
   const mutation = useMutation({
     mutationFn: questionsApi.generateQuestions,
@@ -63,7 +65,7 @@ const GenerateFromFile: React.FC<Props> = ({ translation, onSuccess }) => {
           type="button"
           onClick={handleSubmit}
           className="px-8"
-          disabled={mutation.isPending || !selectedFile}
+          disabled={!user || mutation.isPending || !selectedFile}
         >
           {mutation.isPending
             ? translation.home["generate-question-form"]["button-loading"]
