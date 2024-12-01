@@ -61,13 +61,7 @@ func runTestSuite(t *testing.T, client *helpers.TestClient, filePath string) {
 			var err error
 
 			if testCase.File != nil {
-				resp, respBody, err = client.DoMultipartRequest(
-					testCase.Method,
-					testCase.Endpoint,
-					testCase.File.Path,
-					testCase.File.Field,
-					testCase.Body,
-				)
+				resp, respBody, err = client.DoMultipartRequest(&testCase)
 			} else {
 				resp, respBody, err = client.DoRequest(testCase.Method, testCase.Endpoint, testCase.Body, testCase.Headers)
 			}

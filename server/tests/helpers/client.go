@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"auth-service/internal/context"
+	testsuite "auth-service/tests/test_suite"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -53,14 +54,8 @@ func (tc *TestClient) DoRequest(method, endpoint string, body map[string]interfa
 	return resp, respBody, nil
 }
 
-func (tc *TestClient) DoMultipartRequest(
-	method string,
-	endpoint string,
-	filePath string,
-	fieldName string,
-	body map[string]interface{},
-) (*http.Response, map[string]interface{}, error) {
-	file, err := os.Open(filePath)
+func (tc *TestClient) DoMultipartRequest(testCase *testsuite.TestCase) (*http.Response, map[string]interface{}, error) {
+	file, err := os.Open(testCase.File.Path)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -69,15 +64,16 @@ func (tc *TestClient) DoMultipartRequest(
 	bodyBuffer := &bytes.Buffer{}
 	writer := multipart.NewWriter(bodyBuffer)
 
-	part, err := writer.CreateFormFile(fieldName, filepath.Base(filePath))
+	part, err := writer.CreateFormFile(testCase.File.Field, filepath.Base(testCase.File.Path))
 	if err != nil {
 		return nil, nil, err
 	}
-	if _, err := io.Copy(part, file); err != nil {
+	_, err = io.Copy(part, file)
+	if err != nil {
 		return nil, nil, err
 	}
 
-	for key, value := range body {
+	for key, value := range testCase.Body {
 		if err := writer.WriteField(key, fmt.Sprintf("%v", value)); err != nil {
 			return nil, nil, err
 		}
@@ -85,11 +81,15 @@ func (tc *TestClient) DoMultipartRequest(
 
 	writer.Close()
 
-	req, err := http.NewRequest(method, tc.BaseURL+endpoint, bodyBuffer)
+	req, err := http.NewRequest(testCase.Method, tc.BaseURL+testCase.Endpoint, bodyBuffer)
 	if err != nil {
 		return nil, nil, err
 	}
 	req.Header.Set("Content-Type", writer.FormDataContentType())
+
+	for key, val := range testCase.Headers {
+		req.Header.Set(key, val)
+	}
 
 	resp, err := tc.Client.Do(req)
 	if err != nil {

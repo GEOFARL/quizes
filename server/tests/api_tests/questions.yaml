@@ -13,6 +13,8 @@ tests:
           type: "<non_empty_string>"
           options: "<optional_array_of_strings>"
           correctAnswers: "<non_empty_array_of_strings>"
+    pre_hooks:
+      - requiresAuth
 
   - name: "Generate questions with a valid PDF file"
     method: "POST"
@@ -28,6 +30,8 @@ tests:
           type: "<non_empty_string>"
           options: "<optional_array_of_strings>"
           correctAnswers: "<non_empty_array_of_strings>"
+    pre_hooks:
+      - requiresAuth
 
   - name: "Generate questions with unsupported file type"
     method: "POST"
@@ -38,6 +42,8 @@ tests:
     expected_status: 400
     expected_response:
       error: "unsupported file type. Only TXT and PDF are allowed"
+    pre_hooks:
+      - requiresAuth
 
   - name: "Generate questions with both text and file provided"
     method: "POST"
@@ -50,6 +56,8 @@ tests:
     expected_status: 400
     expected_response:
       error: "provide either text or a file, but not both"
+    pre_hooks:
+      - requiresAuth
 
   - name: "Generate questions with no input"
     method: "POST"
@@ -57,3 +65,5 @@ tests:
     expected_status: 400
     expected_response:
       error: "Invalid input"
+    pre_hooks:
+      - requiresAuth
