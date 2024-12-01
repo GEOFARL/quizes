@@ -20,13 +20,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import ManageQuestions from "./ManageQuestions";
 
 type Props = {
   onSuccess?: (data: GenerateQuestionsResponse) => void;
   translation: Dictionary;
+  questions: GenerateQuestionsResponse["questions"] | null;
+  resetQuestions: () => void;
+  openQuestions: () => void;
 };
 
-const GenerateFromText: React.FC<Props> = ({ onSuccess, translation }) => {
+const GenerateFromText: React.FC<Props> = ({
+  onSuccess,
+  translation,
+  questions,
+  openQuestions,
+  resetQuestions,
+}) => {
   const { user } = useUserContext();
   const form = useForm<GenerateQuestionsPayload>({
     resolver: zodResolver(generateQuestionsSchema),
@@ -84,17 +94,25 @@ const GenerateFromText: React.FC<Props> = ({ onSuccess, translation }) => {
         </div>
 
         <div className="flex justify-end">
-          <Button
-            type="submit"
-            className="px-8"
-            disabled={
-              !user || mutation.isPending || form.getValues().text === ""
-            }
-          >
-            {mutation.isPending
-              ? translation.home["generate-question-form"]["button-loading"]
-              : translation.home["generate-question-form"].button}
-          </Button>
+          {!questions ? (
+            <Button
+              type="submit"
+              className="px-8"
+              disabled={
+                !user || mutation.isPending || form.getValues().text === ""
+              }
+            >
+              {mutation.isPending
+                ? translation.home["generate-question-form"]["button-loading"]
+                : translation.home["generate-question-form"].button}
+            </Button>
+          ) : (
+            <ManageQuestions
+              resetQuestions={resetQuestions}
+              openQuestions={openQuestions}
+              translation={translation}
+            />
+          )}
         </div>
       </form>
     </Form>

@@ -22,14 +22,13 @@ const HomeScreen: React.FC<Props> = ({ translation, user }) => {
 
   const handleDialogClose = useCallback(() => {
     setIsDialogOpen(false);
-    setDialogData(null);
   }, []);
   return (
     <main className="flex flex-col space-y-10 mt-12">
       <Hero translation={translation} />
       <section className="mx-auto max-w-[1000px] px-4 md:px-8 w-full">
         <Card>
-          <CardContent className="p-4 md:p-6 relative">
+          <CardContent className="p-4 md:p-6 relative space-y-2">
             <GenerateQuestions
               onSuccess={(data) => {
                 setDialogData(data);
@@ -37,6 +36,9 @@ const HomeScreen: React.FC<Props> = ({ translation, user }) => {
               }}
               translation={translation}
               user={user}
+              questions={dialogData?.questions ?? null}
+              resetQuestions={() => setDialogData(null)}
+              openQuestions={() => setIsDialogOpen(true)}
             />
           </CardContent>
         </Card>
@@ -44,7 +46,7 @@ const HomeScreen: React.FC<Props> = ({ translation, user }) => {
 
       <Reviews translation={translation} />
 
-      {isDialogOpen && dialogData && (
+      {dialogData && (
         <Dialog
           title={translation.home.questions.title}
           description={translation.home.questions.description}

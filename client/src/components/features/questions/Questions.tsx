@@ -17,11 +17,6 @@ const componentByType: Record<
 };
 
 const Questions: React.FC<Props> = ({ questions }) => {
-  // return (
-  //   <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-md overflow-auto">
-  //     {JSON.stringify(questions, null, 2)}
-  //   </pre>
-  // );
   return (
     <div className="flex flex-col space-y-4">
       {questions.map((question) => {

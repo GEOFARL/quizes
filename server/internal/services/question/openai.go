@@ -1,9 +1,11 @@
 package question
 
 import (
+	"auth-service/internal/utils"
 	"context"
 	"encoding/json"
 	"errors"
+	"strings"
 
 	openai "github.com/sashabaranov/go-openai"
 )
@@ -23,7 +25,7 @@ func NewOpenAIService(apiKey string) *OpenAIService {
 
 func (o *OpenAIService) GenerateQuestions(prompt string) ([]Question, error) {
 	resp, err := o.client.CreateChatCompletion(context.Background(), openai.ChatCompletionRequest{
-		Model: openai.GPT4,
+		Model: openai.GPT3Dot5Turbo,
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Role:    openai.ChatMessageRoleSystem,
@@ -39,15 +41,26 @@ func (o *OpenAIService) GenerateQuestions(prompt string) ([]Question, error) {
 		return nil, err
 	}
 
+	utils.Logger.Info("Raw OpenAI response: ", string(resp.Choices[0].Message.Content))
+
 	if len(resp.Choices) == 0 {
 		return nil, errors.New("no response from OpenAI")
 	}
 
+	cleanedResponse := cleanResponse(resp.Choices[0].Message.Content)
+
 	var questions []Question
-	err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &questions)
+	err = json.Unmarshal([]byte(cleanedResponse), &questions)
 	if err != nil {
+		utils.Logger.WithError(err).WithField("response", resp.Choices[0].Message.Content).Error("Failed to unmarshal JSON")
 		return nil, err
 	}
 
 	return questions, nil
+}
+
+func cleanResponse(response string) string {
+	cleaned := strings.Trim(response, "`")
+	cleaned = strings.Replace(cleaned, "json", "", 1)
+	return strings.TrimSpace(cleaned)
 }

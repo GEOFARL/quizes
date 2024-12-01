@@ -8,6 +8,8 @@
     "input-placeholder": "Type your message here",
     "button": "Send",
     "button-loading": "Generating...",
+    "button-reset": "Reset",
+    "button-open": "Open",
     "switch": "File / Text",
     "dnd": {
       "default": "Drag and drop your file here or click to browse",

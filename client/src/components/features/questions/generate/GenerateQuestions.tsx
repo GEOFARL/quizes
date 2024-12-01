@@ -14,12 +14,18 @@ type Props = {
   onSuccess?: (data: GenerateQuestionsResponse) => void;
   translation: Dictionary;
   user: string;
+  questions: GenerateQuestionsResponse["questions"] | null;
+  resetQuestions: () => void;
+  openQuestions: () => void;
 };
 
 const GenerateQuestionsForm: React.FC<Props> = ({
   onSuccess,
   translation,
   user,
+  questions,
+  resetQuestions,
+  openQuestions,
 }) => {
   const [isText, setIsText] = useState(false);
   const deserializedUser = User.fromString(user);
@@ -33,9 +39,21 @@ const GenerateQuestionsForm: React.FC<Props> = ({
         <Switch id="file-text" onCheckedChange={setIsText} />
       </div>
       {isText ? (
-        <GenerateFromText translation={translation} onSuccess={onSuccess} />
+        <GenerateFromText
+          translation={translation}
+          onSuccess={onSuccess}
+          questions={questions}
+          resetQuestions={resetQuestions}
+          openQuestions={openQuestions}
+        />
       ) : (
-        <GenerateFromFile translation={translation} onSuccess={onSuccess} />
+        <GenerateFromFile
+          translation={translation}
+          onSuccess={onSuccess}
+          questions={questions}
+          resetQuestions={resetQuestions}
+          openQuestions={openQuestions}
+        />
       )}
       {!deserializedUser && <UnauthorizedOverlay translation={translation} />}
     </div>

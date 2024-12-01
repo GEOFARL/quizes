@@ -7,16 +7,27 @@ import getToken from "@/lib/getToken";
 import { Dictionary } from "@/types/dictionary";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import FileDropzone from "../../../common/FileDropzone";
+import ManageQuestions from "./ManageQuestions";
 
 type Props = {
   translation: Dictionary;
   onSuccess?: (data: GenerateQuestionsResponse) => void;
+  questions: GenerateQuestionsResponse["questions"] | null;
+  resetQuestions: () => void;
+  openQuestions: () => void;
 };
 
-const GenerateFromFile: React.FC<Props> = ({ translation, onSuccess }) => {
+const GenerateFromFile: React.FC<Props> = ({
+  translation,
+  onSuccess,
+  questions,
+  resetQuestions,
+  openQuestions,
+}) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [areFilesRemoved, setAreFilesRemoved] = useState(false);
   const { user } = useUserContext();
 
   const mutation = useMutation({
@@ -25,6 +36,8 @@ const GenerateFromFile: React.FC<Props> = ({ translation, onSuccess }) => {
     },
     onSuccess: (data) => {
       console.log("Generated questions:", data);
+      setSelectedFile(null);
+      setAreFilesRemoved(true);
       onSuccess?.(data);
     },
     onError: (error) => {
@@ -32,7 +45,7 @@ const GenerateFromFile: React.FC<Props> = ({ translation, onSuccess }) => {
     },
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (!selectedFile) {
       console.error("No file selected");
       return;
@@ -42,7 +55,7 @@ const GenerateFromFile: React.FC<Props> = ({ translation, onSuccess }) => {
     formData.append("file", selectedFile);
 
     mutation.mutate(formData);
-  };
+  }, [mutation, selectedFile]);
 
   return (
     <div className="space-y-2">
@@ -54,6 +67,7 @@ const GenerateFromFile: React.FC<Props> = ({ translation, onSuccess }) => {
         }}
         multiple={false}
         onFilesChange={(files) => {
+          setAreFilesRemoved(false);
           setSelectedFile(files[0]);
         }}
         dropzoneText={{
@@ -62,18 +76,27 @@ const GenerateFromFile: React.FC<Props> = ({ translation, onSuccess }) => {
           disabled: translation.home["generate-question-form"].dnd.disabled,
         }}
         translation={translation}
+        removeAllFiles={areFilesRemoved}
       />
       <div className="flex justify-end">
-        <Button
-          type="button"
-          onClick={handleSubmit}
-          className="px-8"
-          disabled={!user || mutation.isPending || !selectedFile}
-        >
-          {mutation.isPending
-            ? translation.home["generate-question-form"]["button-loading"]
-            : translation.home["generate-question-form"].button}
-        </Button>
+        {!questions ? (
+          <Button
+            type="button"
+            onClick={handleSubmit}
+            className="px-8"
+            disabled={!user || mutation.isPending || !selectedFile}
+          >
+            {mutation.isPending
+              ? translation.home["generate-question-form"]["button-loading"]
+              : translation.home["generate-question-form"].button}
+          </Button>
+        ) : (
+          <ManageQuestions
+            resetQuestions={resetQuestions}
+            openQuestions={openQuestions}
+            translation={translation}
+          />
+        )}
       </div>
     </div>
   );

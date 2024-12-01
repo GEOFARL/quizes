@@ -1,7 +1,7 @@
 "use client";
 
 import { useDropzone } from "react-dropzone";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Dictionary } from "@/types/dictionary";
@@ -12,6 +12,7 @@ type FileDropzoneProps = {
   multiple?: boolean;
   maxSize?: number;
   onFilesChange?: (files: File[]) => void;
+  removeAllFiles?: boolean;
   className?: string;
   dropzoneText?: {
     default: string;
@@ -35,6 +36,7 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({
     disabled: "Only one file is allowed",
   },
   translation,
+  removeAllFiles,
 }) => {
   const [files, setFiles] = useState<File[]>([]);
 
@@ -66,6 +68,12 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({
       onFilesChange(updatedFiles);
     }
   };
+
+  useEffect(() => {
+    if (removeAllFiles) {
+      setFiles([]);
+    }
+  }, [removeAllFiles]);
 
   const renderAcceptedFormats = () => {
     return Object.entries(accept).map(([mimeType, extensions], index) => (
