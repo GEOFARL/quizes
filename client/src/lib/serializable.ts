@@ -14,7 +14,18 @@ export class Serializable<T extends Record<string, any>> {
     this: new (rawData: T) => U,
     jsonString: string
   ): U {
-    const parsedData = JSON.parse(jsonString) as T;
+    let parsedData: T;
+
+    try {
+      if (typeof jsonString === "string" && jsonString.trim()) {
+        parsedData = JSON.parse(jsonString) as T;
+      } else {
+        parsedData = {} as T;
+      }
+    } catch {
+      parsedData = {} as T;
+    }
+
     return new this(parsedData);
   }
 }

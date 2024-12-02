@@ -2,6 +2,7 @@
 
 import { Token } from "@/lib/jwt/token";
 import { TokenStorage } from "@/lib/jwt/token-storage";
+import { ClientCookieStorageStrategy } from "@/lib/storage/cookies/client";
 import { LocalStorageStrategy } from "@/lib/storage/local-storage";
 import { User } from "@/lib/user/user";
 import { JwtPayload } from "@/types/auth/jwt";
@@ -36,6 +37,7 @@ export const UserProvider: React.FC<PropsWithChildren> = ({ children }) => {
       const jwt = new Token<JwtPayload>(token);
       if (jwt.isExpired()) {
         tokenStorage.clear();
+        new TokenStorage(new ClientCookieStorageStrategy()).clear();
         return;
       }
       setUser(new User(jwt.decode().user));

@@ -1,6 +1,7 @@
 package question
 
 import (
+	"auth-service/internal/utils"
 	"fmt"
 	"strings"
 )
@@ -34,7 +35,31 @@ func (s *Service) GenerateQuestions(
 
 	questions = validateQuestions(questions)
 
-	return questions, nil
+	if len(questions) < numQuestions {
+		missingCount := numQuestions - len(questions)
+		utils.Logger.Warn(fmt.Sprintf("warning: Only %d questions generated, %d missing.\n", len(questions), missingCount))
+		additionalPrompt := fmt.Sprintf("Generate %d more questions based on the following text:\n%s", missingCount, text)
+		moreQuestions, err := s.openAI.GenerateQuestions(additionalPrompt)
+		if err == nil {
+			questions = append(questions, validateQuestions(moreQuestions)...)
+		}
+	}
+
+	if len(questions) < numQuestions {
+		missingCount := numQuestions - len(questions)
+		utils.Logger.Warn(fmt.Sprintf("Error: Could not generate %d questions. Filling with placeholders.\n", missingCount))
+		for i := 0; i < missingCount; i++ {
+			questions = append(questions, Question{
+				ID:             fmt.Sprintf("placeholder-%d", i+1),
+				Question:       "Placeholder question",
+				Type:           "unknown",
+				Options:        []string{},
+				CorrectAnswers: []string{},
+			})
+		}
+	}
+
+	return questions[:numQuestions], nil
 }
 
 func (s *Service) buildPrompt(
@@ -60,7 +85,8 @@ func (s *Service) buildPrompt(
 	}
 
 	return fmt.Sprintf(`
-Generate a list of %d questions of the following types: %s, based on the provided text with a difficulty level of "%s".
+Generate exactly %d questions of the following types: %s, based on the provided text with a difficulty level of "%s".
+The total number of questions must match the specified count, no more and no less.
 The questions should be written in the language "%s", regardless of the language of the provided text.
 Use clear and concise language, focusing on the key ideas in the text.
 Ensure that at least one question of each specified type is included in the output.
