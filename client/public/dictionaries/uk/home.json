@@ -46,7 +46,8 @@
     "description": "Ось запитання, згенеровані на основі вашого введення:",
     "question": "Запитання",
     "explanation": "Пояснення",
-    "downloadPDF": "Завантажити PDF"
+    "downloadPDF": "Завантажити PDF",
+    "searchPlaceholder": "Пошук запитань"
   },
   "reviews": {
     "title": "Наші відгуки",

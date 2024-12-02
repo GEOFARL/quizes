@@ -9,6 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import HighlightText from "@/components/utils/TextHighlight";
 import { toast } from "@/hooks/use-toast";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +18,7 @@ import { z } from "zod";
 
 type Props = {
   question: GenerateQuestionsResponse["questions"][number];
+  highlight: string;
 };
 
 const FormSchema = z.object({
@@ -25,7 +27,7 @@ const FormSchema = z.object({
   }),
 });
 
-const MultipleChoice: React.FC<Props> = ({ question }) => {
+const MultipleChoice: React.FC<Props> = ({ question, highlight }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -45,7 +47,9 @@ const MultipleChoice: React.FC<Props> = ({ question }) => {
   }
   return (
     <div>
-      <p className="font-semibold text-lg">{question.question}</p>
+      <p className="font-semibold text-lg">
+        <HighlightText text={question.question} highlight={highlight} />
+      </p>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-2">
           <FormField
@@ -78,7 +82,9 @@ const MultipleChoice: React.FC<Props> = ({ question }) => {
                               }}
                             />
                           </FormControl>
-                          <FormLabel>{item}</FormLabel>
+                          <FormLabel>
+                            <HighlightText text={item} highlight={highlight} />
+                          </FormLabel>
                         </FormItem>
                       );
                     }}

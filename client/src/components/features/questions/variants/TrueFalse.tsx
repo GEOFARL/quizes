@@ -1,16 +1,18 @@
+import HighlightText from "@/components/utils/TextHighlight";
 import capitalize from "@/lib/capitalize";
 import { cn } from "@/lib/utils";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 
 type Props = {
   question: GenerateQuestionsResponse["questions"][number];
+  highlight: string;
 };
 
-const TrueFalse: React.FC<Props> = ({ question }) => {
+const TrueFalse: React.FC<Props> = ({ question, highlight }) => {
   return (
     <div>
       <p className="font-semibold text-lg text-gray-800 dark:text-gray-100">
-        {question.question}
+        <HighlightText text={question.question} highlight={highlight} />
       </p>
       <div className="space-y-1 mt-2">
         {question.options?.map((option) => (
@@ -26,7 +28,7 @@ const TrueFalse: React.FC<Props> = ({ question }) => {
             key={option}
           >
             <p className="text-sm font-medium text-gray-800 dark:text-gray-100">
-              {capitalize(option)}
+              <HighlightText text={capitalize(option)} highlight={highlight} />
             </p>
           </div>
         ))}

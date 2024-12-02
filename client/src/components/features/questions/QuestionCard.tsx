@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import HighlightText from "@/components/utils/TextHighlight";
 import { Dictionary } from "@/types/dictionary";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 import { PropsWithChildren } from "react";
@@ -6,9 +7,15 @@ import { PropsWithChildren } from "react";
 type Props = {
   question: GenerateQuestionsResponse["questions"][number];
   translation: Dictionary;
+  highlight: string;
 } & PropsWithChildren;
 
-const QuestionCard: React.FC<Props> = ({ question, translation, children }) => {
+const QuestionCard: React.FC<Props> = ({
+  question,
+  translation,
+  highlight,
+  children,
+}) => {
   return (
     <Card className="border border-gray-200 dark:border-gray-700 shadow-md">
       <CardHeader className="p-4 pb-2">
@@ -27,7 +34,10 @@ const QuestionCard: React.FC<Props> = ({ question, translation, children }) => {
             </CardHeader>
             <CardContent className="pt-0 px-4 pb-3">
               <p className="text-sm text-gray-700 dark:text-gray-300">
-                {question.explanation}
+                <HighlightText
+                  text={question.explanation}
+                  highlight={highlight}
+                />
               </p>
             </CardContent>
           </Card>

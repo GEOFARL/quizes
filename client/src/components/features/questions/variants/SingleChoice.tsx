@@ -1,16 +1,20 @@
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import HighlightText from "@/components/utils/TextHighlight";
 import toKebabCase from "@/lib/to-kebab-case";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 
 type Props = {
   question: GenerateQuestionsResponse["questions"][number];
+  highlight: string;
 };
 
-const SingleChoice: React.FC<Props> = ({ question }) => {
+const SingleChoice: React.FC<Props> = ({ question, highlight }) => {
   return (
     <div>
-      <p className="font-semibold text-lg">{question.question}</p>
+      <p className="font-semibold text-lg">
+        <HighlightText text={question.question} highlight={highlight} />
+      </p>
       <RadioGroup
         defaultValue={toKebabCase(question.correctAnswers[0])}
         className="mt-2"
@@ -21,7 +25,9 @@ const SingleChoice: React.FC<Props> = ({ question }) => {
               value={toKebabCase(option)}
               id={toKebabCase(option)}
             />
-            <Label htmlFor={toKebabCase(option)}>{option}</Label>
+            <Label htmlFor={toKebabCase(option)}>
+              <HighlightText text={option} highlight={highlight} />
+            </Label>
           </div>
         ))}
       </RadioGroup>
