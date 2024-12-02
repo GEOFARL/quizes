@@ -45,7 +45,8 @@
     "title": "Generated Questions",
     "description": "Here are the questions generated from your input:",
     "question": "Question",
-    "explanation": "Explanation"
+    "explanation": "Explanation",
+    "downloadPDF": "Download PDF"
   },
   "reviews": {
     "title": "Our Reviews",

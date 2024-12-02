@@ -29,6 +29,7 @@
     "clsx": "^2.1.1",
     "cookies-next": "^5.0.2",
     "js-cookie": "^3.0.5",
+    "jspdf": "^2.5.2",
     "jwt-decode": "^4.0.0",
     "lucide": "^0.460.0",
     "lucide-react": "^0.460.0",
@@ -42,6 +43,7 @@
     "react-textarea-autosize": "^8.5.5",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.0.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
