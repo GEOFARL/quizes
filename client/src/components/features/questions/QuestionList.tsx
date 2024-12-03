@@ -9,6 +9,7 @@ type Props = {
   translation: Dictionary;
   highlight: string;
   onDelete: (id: string) => void;
+  onUpdateCorrectAnswers: (id: string, correctAnswers: string[]) => void;
 };
 
 const QuestionList: React.FC<Props> = ({
@@ -17,6 +18,7 @@ const QuestionList: React.FC<Props> = ({
   translation,
   highlight,
   onDelete,
+  onUpdateCorrectAnswers,
 }) => {
   return (
     <AnimatePresence>
@@ -36,6 +38,7 @@ const QuestionList: React.FC<Props> = ({
             translation={translation}
             highlight={highlight}
             onDelete={onDelete}
+            onUpdateCorrectAnswers={onUpdateCorrectAnswers}
           />
         </motion.div>
       ))}

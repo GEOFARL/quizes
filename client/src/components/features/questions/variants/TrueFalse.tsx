@@ -2,13 +2,23 @@ import HighlightText from "@/components/utils/TextHighlight";
 import capitalize from "@/lib/capitalize";
 import { cn } from "@/lib/utils";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
+import { useCallback } from "react";
 
 type Props = {
   question: GenerateQuestionsResponse["questions"][number];
   highlight: string;
+  onUpdateCorrectAnswers: (correctAnswers: string[]) => void;
 };
 
-const TrueFalse: React.FC<Props> = ({ question, highlight }) => {
+const TrueFalse: React.FC<Props> = ({
+  question,
+  highlight,
+  onUpdateCorrectAnswers,
+}) => {
+  const handleToggle = useCallback((option: string) => {
+    onUpdateCorrectAnswers([option]);
+  }, []);
+
   return (
     <div>
       <p className="font-semibold text-lg text-gray-800 dark:text-gray-100">
@@ -26,6 +36,7 @@ const TrueFalse: React.FC<Props> = ({ question, highlight }) => {
               }
             )}
             key={option}
+            onClick={() => handleToggle(option)}
           >
             <p className="text-sm font-medium text-gray-800 dark:text-gray-100">
               <HighlightText text={capitalize(option)} highlight={highlight} />

@@ -10,5 +10,14 @@ export const useQuestions = (
     setQuestions((prevQuestions) => prevQuestions.filter((q) => q.id !== id));
   }, []);
 
-  return { questions, deleteQuestion };
+  const updateCorrectAnswers = useCallback(
+    (id: string, correctAnswers: string[]) => {
+      setQuestions((prevQuestions) =>
+        prevQuestions.map((q) => (q.id === id ? { ...q, correctAnswers } : q))
+      );
+    },
+    []
+  );
+
+  return { questions, deleteQuestion, updateCorrectAnswers };
 };

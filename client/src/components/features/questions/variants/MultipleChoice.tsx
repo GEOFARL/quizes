@@ -13,12 +13,14 @@ import HighlightText from "@/components/utils/TextHighlight";
 import { toast } from "@/hooks/use-toast";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 type Props = {
   question: GenerateQuestionsResponse["questions"][number];
   highlight: string;
+  onUpdateCorrectAnswers: (correctAnswers: string[]) => void;
 };
 
 const FormSchema = z.object({
@@ -27,13 +29,25 @@ const FormSchema = z.object({
   }),
 });
 
-const MultipleChoice: React.FC<Props> = ({ question, highlight }) => {
+const MultipleChoice: React.FC<Props> = ({
+  question,
+  highlight,
+  onUpdateCorrectAnswers,
+}) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       items: question.correctAnswers,
     },
   });
+
+  const handleToggle = useCallback((option: string, isChecked: boolean) => {
+    const updatedAnswers = isChecked
+      ? [...question.correctAnswers, option]
+      : question.correctAnswers.filter((answer) => answer !== option);
+
+    onUpdateCorrectAnswers(updatedAnswers);
+  }, []);
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
@@ -72,6 +86,10 @@ const MultipleChoice: React.FC<Props> = ({ question, highlight }) => {
                             <Checkbox
                               checked={field.value?.includes(item)}
                               onCheckedChange={(checked) => {
+                                handleToggle(
+                                  item,
+                                  checked === "indeterminate" ? false : checked
+                                );
                                 return checked
                                   ? field.onChange([...field.value, item])
                                   : field.onChange(

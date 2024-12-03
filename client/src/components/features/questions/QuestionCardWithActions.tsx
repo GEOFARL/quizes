@@ -12,12 +12,14 @@ type Props = {
   translation: Dictionary;
   highlight: string;
   onDelete: (id: string) => void;
+  onUpdateCorrectAnswers: (id: string, correctAnswers: string[]) => void;
 };
 
 const componentByType: Record<
   string,
   React.FC<{
     question: GenerateQuestionsResponse["questions"][number];
+    onUpdateCorrectAnswers: (correctAnswers: string[]) => void;
     highlight: string;
   }>
 > = {
@@ -31,6 +33,7 @@ const QuestionCardWithActions: React.FC<Props> = ({
   translation,
   highlight,
   onDelete,
+  onUpdateCorrectAnswers,
 }) => {
   const Component = componentByType[question.type];
   return (
@@ -40,7 +43,13 @@ const QuestionCardWithActions: React.FC<Props> = ({
         translation={translation}
         highlight={highlight}
       >
-        <Component question={question} highlight={highlight} />
+        <Component
+          question={question}
+          highlight={highlight}
+          onUpdateCorrectAnswers={(correctAnswers) =>
+            onUpdateCorrectAnswers(question.id, correctAnswers)
+          }
+        />
       </QuestionCard>
       <div className="absolute top-[8px] right-[8px]">
         <Button

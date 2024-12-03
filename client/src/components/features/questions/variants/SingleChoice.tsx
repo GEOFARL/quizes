@@ -7,9 +7,14 @@ import { GenerateQuestionsResponse } from "@/types/questions/response";
 type Props = {
   question: GenerateQuestionsResponse["questions"][number];
   highlight: string;
+  onUpdateCorrectAnswers: (correctAnswers: string[]) => void;
 };
 
-const SingleChoice: React.FC<Props> = ({ question, highlight }) => {
+const SingleChoice: React.FC<Props> = ({
+  question,
+  highlight,
+  onUpdateCorrectAnswers,
+}) => {
   return (
     <div>
       <p className="font-semibold text-lg">
@@ -18,6 +23,7 @@ const SingleChoice: React.FC<Props> = ({ question, highlight }) => {
       <RadioGroup
         defaultValue={toKebabCase(question.correctAnswers[0])}
         className="mt-2"
+        onValueChange={(value) => onUpdateCorrectAnswers([value])}
       >
         {question.options?.map((option) => (
           <div className="flex items-center space-x-2" key={option}>

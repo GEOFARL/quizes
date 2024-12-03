@@ -19,7 +19,8 @@ const Questions: React.FC<Props> = ({
   questions: initialQuestions,
   translation,
 }) => {
-  const { questions, deleteQuestion } = useQuestions(initialQuestions);
+  const { questions, deleteQuestion, updateCorrectAnswers } =
+    useQuestions(initialQuestions);
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const pathname = usePathname();
@@ -65,6 +66,7 @@ const Questions: React.FC<Props> = ({
         translation={translation}
         highlight={debouncedSearchQuery}
         onDelete={deleteQuestion}
+        onUpdateCorrectAnswers={updateCorrectAnswers}
       />
     </div>
   );
