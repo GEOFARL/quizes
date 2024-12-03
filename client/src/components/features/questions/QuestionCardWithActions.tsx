@@ -13,6 +13,9 @@ type Props = {
   highlight: string;
   onDelete: (id: string) => void;
   onUpdateCorrectAnswers: (id: string, correctAnswers: string[]) => void;
+  onUpdateTitle: (id: string, newTitle: string) => void;
+  onUpdateOptions: (id: string, newOptions: string[]) => void;
+  onUpdateExplanation: (id: string, newExplanation: string) => void;
 };
 
 const componentByType: Record<
@@ -20,6 +23,8 @@ const componentByType: Record<
   React.FC<{
     question: GenerateQuestionsResponse["questions"][number];
     onUpdateCorrectAnswers: (correctAnswers: string[]) => void;
+    onUpdateOptions: (options: string[]) => void;
+    onUpdateTitle: (title: string) => void;
     highlight: string;
   }>
 > = {
@@ -34,6 +39,9 @@ const QuestionCardWithActions: React.FC<Props> = ({
   highlight,
   onDelete,
   onUpdateCorrectAnswers,
+  onUpdateOptions,
+  onUpdateTitle,
+  onUpdateExplanation,
 }) => {
   const Component = componentByType[question.type];
   return (
@@ -42,6 +50,9 @@ const QuestionCardWithActions: React.FC<Props> = ({
         question={question}
         translation={translation}
         highlight={highlight}
+        onUpdateExplanation={(explanation) =>
+          onUpdateExplanation(question.id, explanation)
+        }
       >
         <Component
           question={question}
@@ -49,12 +60,14 @@ const QuestionCardWithActions: React.FC<Props> = ({
           onUpdateCorrectAnswers={(correctAnswers) =>
             onUpdateCorrectAnswers(question.id, correctAnswers)
           }
+          onUpdateOptions={(options) => onUpdateOptions(question.id, options)}
+          onUpdateTitle={(title) => onUpdateTitle(question.id, title)}
         />
       </QuestionCard>
-      <div className="absolute top-[8px] right-[8px]">
+      <div className="absolute top-[6px] right-[6px]">
         <Button
           variant="destructive"
-          className="px-3 py-2"
+          className="h-[32px] w-[32px] [&_svg]:size-3"
           onClick={() => onDelete(question.id)}
         >
           <Trash />

@@ -10,6 +10,9 @@ type Props = {
   highlight: string;
   onDelete: (id: string) => void;
   onUpdateCorrectAnswers: (id: string, correctAnswers: string[]) => void;
+  onUpdateTitle: (id: string, newTitle: string) => void;
+  onUpdateOptions: (id: string, newOptions: string[]) => void;
+  onUpdateExplanation: (id: string, newExplanation: string) => void;
 };
 
 const QuestionList: React.FC<Props> = ({
@@ -19,6 +22,9 @@ const QuestionList: React.FC<Props> = ({
   highlight,
   onDelete,
   onUpdateCorrectAnswers,
+  onUpdateTitle,
+  onUpdateOptions,
+  onUpdateExplanation,
 }) => {
   return (
     <AnimatePresence>
@@ -39,6 +45,9 @@ const QuestionList: React.FC<Props> = ({
             highlight={highlight}
             onDelete={onDelete}
             onUpdateCorrectAnswers={onUpdateCorrectAnswers}
+            onUpdateTitle={onUpdateTitle}
+            onUpdateOptions={onUpdateOptions}
+            onUpdateExplanation={onUpdateExplanation}
           />
         </motion.div>
       ))}

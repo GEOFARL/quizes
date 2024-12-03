@@ -7,20 +7,27 @@ import { Dictionary } from "@/types/dictionary";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 import downloadPDFQuestionsPDF from "@/lib/downloadQuestionsPDF";
 import { usePathname } from "next/navigation";
-import { useQuestions } from "@/hooks/questions/use-questions";
 import { useCallback, useState } from "react";
 
 type Props = {
   questions: GenerateQuestionsResponse["questions"];
   translation: Dictionary;
+  deleteQuestion: (id: string) => void;
+  updateCorrectAnswers: (id: string, correctAnswers: string[]) => void;
+  handleUpdateOptions: (id: string, newOptions: string[]) => void;
+  handleUpdateTitle: (id: string, newTitle: string) => void;
+  handleUpdateExplanation: (id: string, newExplanation: string) => void;
 };
 
 const Questions: React.FC<Props> = ({
-  questions: initialQuestions,
+  questions,
   translation,
+  deleteQuestion,
+  updateCorrectAnswers,
+  handleUpdateOptions,
+  handleUpdateTitle,
+  handleUpdateExplanation,
 }) => {
-  const { questions, deleteQuestion, updateCorrectAnswers } =
-    useQuestions(initialQuestions);
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const pathname = usePathname();
@@ -41,7 +48,7 @@ const Questions: React.FC<Props> = ({
 
   return (
     <div className="flex flex-col space-y-6">
-      <div className="mb-4 flex justify-between items-center">
+      <div className="flex justify-between items-center">
         <Input
           type="text"
           value={searchQuery}
@@ -67,6 +74,9 @@ const Questions: React.FC<Props> = ({
         highlight={debouncedSearchQuery}
         onDelete={deleteQuestion}
         onUpdateCorrectAnswers={updateCorrectAnswers}
+        onUpdateOptions={handleUpdateOptions}
+        onUpdateTitle={handleUpdateTitle}
+        onUpdateExplanation={handleUpdateExplanation}
       />
     </div>
   );

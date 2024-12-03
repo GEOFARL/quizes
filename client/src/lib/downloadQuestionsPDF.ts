@@ -93,7 +93,6 @@ const downloadPDFQuestionsPDF = (
     doc.setTextColor(0, 0, 0);
     doc.setFont("times", "normal");
 
-    // Render explanation
     if (wrappedExplanation.length > 0) {
       doc.setFont("times", "italic");
       wrappedExplanation.forEach((line: any) => {

@@ -4,8 +4,8 @@ import Dialog from "@/components/features/auth/Dialog";
 import GenerateQuestions from "@/components/features/questions/generate/GenerateQuestions";
 import Hero from "@/components/layout/Hero";
 import { Card, CardContent } from "@/components/ui/card";
+import { useQuestions } from "@/hooks/questions/use-questions";
 import { Dictionary } from "@/types/dictionary";
-import { GenerateQuestionsResponse } from "@/types/questions/response";
 import { useCallback, useState } from "react";
 import Questions from "../features/questions/Questions";
 import Reviews from "../layout/Reviews";
@@ -16,9 +16,16 @@ type Props = {
 };
 
 const HomeScreen: React.FC<Props> = ({ translation, user }) => {
-  const [dialogData, setDialogData] =
-    useState<GenerateQuestionsResponse | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const {
+    questions,
+    setQuestions,
+    deleteQuestion,
+    updateCorrectAnswers,
+    handleUpdateOptions,
+    handleUpdateTitle,
+    handleUpdateExplanation,
+  } = useQuestions(null);
 
   const handleDialogClose = useCallback(() => {
     setIsDialogOpen(false);
@@ -31,13 +38,13 @@ const HomeScreen: React.FC<Props> = ({ translation, user }) => {
           <CardContent className="p-4 md:p-6 relative space-y-2">
             <GenerateQuestions
               onSuccess={(data) => {
-                setDialogData(data);
+                setQuestions(data.questions);
                 setIsDialogOpen(true);
               }}
               translation={translation}
               user={user}
-              questions={dialogData?.questions ?? null}
-              resetQuestions={() => setDialogData(null)}
+              questions={questions}
+              resetQuestions={() => setQuestions(null)}
               openQuestions={() => setIsDialogOpen(true)}
             />
           </CardContent>
@@ -46,7 +53,7 @@ const HomeScreen: React.FC<Props> = ({ translation, user }) => {
 
       <Reviews translation={translation} />
 
-      {dialogData && (
+      {questions && (
         <Dialog
           title={translation.home.questions.title}
           description={translation.home.questions.description}
@@ -55,8 +62,13 @@ const HomeScreen: React.FC<Props> = ({ translation, user }) => {
           className="w-[90vw] md:max-w-[1200px] max-h-[85vh] overflow-auto"
         >
           <Questions
-            questions={dialogData.questions}
+            questions={questions}
             translation={translation}
+            deleteQuestion={deleteQuestion}
+            handleUpdateExplanation={handleUpdateExplanation}
+            handleUpdateOptions={handleUpdateOptions}
+            handleUpdateTitle={handleUpdateTitle}
+            updateCorrectAnswers={updateCorrectAnswers}
           />
         </Dialog>
       )}
