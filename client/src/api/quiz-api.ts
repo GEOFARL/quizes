@@ -2,6 +2,7 @@ import { SaveQuizPayload } from "@/types/quiz/payload";
 import { BaseApi } from "./base-api";
 import { autobind } from "@/lib/autobind";
 import { Quiz } from "@/types/quiz/quiz";
+import { GetQuizzesResponse } from "@/types/quiz/response";
 
 class QuizApi extends BaseApi {
   constructor() {
@@ -17,9 +18,17 @@ class QuizApi extends BaseApi {
     });
   }
 
-  async getQuizzes(token?: string): Promise<Quiz[]> {
-    return this.fetch<Quiz[]>("/", {
+  async getQuizzes(
+    page: number = 1,
+    limit: number = 10,
+    token?: string
+  ): Promise<GetQuizzesResponse> {
+    return this.fetch<GetQuizzesResponse>("/", {
       method: "GET",
+      queryParams: {
+        page,
+        limit,
+      },
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
   }

@@ -1,28 +1,47 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import PaginationComponent from "@/components/common/Pagination";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { Quiz } from "@/types/quiz/quiz";
-import Dialog from "../auth/Dialog";
-import { Dictionary } from "@/types/dictionary";
-import Questions from "../questions/Questions";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import MaxWidthWrapper from "@/components/utils/MaxWidthWrapper";
+import useQuizzes from "@/hooks/quiz/use-quizzes";
 import { pluralizationRules, pluralize } from "@/lib/pluralize";
+import { Dictionary } from "@/types/dictionary";
+import { Pagination as PaginationType } from "@/types/pagination";
+import { Quiz } from "@/types/quiz/quiz";
+import { useState } from "react";
+import Dialog from "../auth/Dialog";
+import Questions from "../questions/Questions";
 
 type QuizzesListProps = {
   quizzes: Quiz[];
   translation: Dictionary;
+  pagination: PaginationType;
 };
 
-const QuizzesList: React.FC<QuizzesListProps> = ({ quizzes, translation }) => {
+const QuizzesList: React.FC<QuizzesListProps> = ({
+  quizzes,
+  translation,
+  pagination,
+}) => {
   const [openQuizId, setOpenQuizId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(pagination.page);
+  const totalPages = Math.ceil(pagination.total / pagination.limit);
+
+  const { data, isLoading } = useQuizzes(currentPage, pagination.limit, {
+    data: quizzes,
+    pagination,
+  });
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const handleDialogClose = () => setOpenQuizId(null);
 
   return (
     <MaxWidthWrapper className="space-y-4 w-full">
-      {quizzes.map((quiz) => (
+      {(isLoading ? quizzes : data?.data ?? []).map((quiz) => (
         <Card key={quiz.id} className="w-full shadow-md border rounded-lg">
           <CardHeader className="p-4">
             <CardTitle className="text-xl font-semibold">{quiz.name}</CardTitle>
@@ -63,6 +82,12 @@ const QuizzesList: React.FC<QuizzesListProps> = ({ quizzes, translation }) => {
           )}
         </Card>
       ))}
+
+      <PaginationComponent
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+        totalPages={totalPages}
+      />
     </MaxWidthWrapper>
   );
 };

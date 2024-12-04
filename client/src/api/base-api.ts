@@ -21,6 +21,10 @@ export class BaseApi {
     const normalizedEndpoint = endpoint.replace(/^\/+/, "");
     const url = new URL(`${normalizedBaseUrl}/${normalizedEndpoint}`);
 
+    if (normalizedEndpoint === "") {
+      url.pathname = url.pathname.replace(/\/$/, "");
+    }
+
     if (queryParams) {
       Object.entries(queryParams).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {

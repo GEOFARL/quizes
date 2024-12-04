@@ -3,6 +3,7 @@ package quiz
 import (
 	"auth-service/internal/models"
 	"auth-service/internal/services/quiz"
+	"auth-service/internal/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -44,11 +45,20 @@ func (h *Handler) GetQuizzes(c *gin.Context) {
 		return
 	}
 
-	quizzes, err := h.quizService.GetUserQuizzes(userID.(string))
+	pagination, err := utils.GetPagination(c, 1, 10)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	quizzes, updatedPagination, err := h.quizService.GetUserQuizzes(userID.(string), pagination)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, quizzes)
+	c.JSON(http.StatusOK, gin.H{
+		"data":       quizzes,
+		"pagination": updatedPagination,
+	})
 }

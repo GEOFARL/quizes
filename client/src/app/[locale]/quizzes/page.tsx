@@ -24,11 +24,21 @@ const Page: React.FC<Props> = async ({ params }) => {
     redirect(`/${locale}/login`);
   }
 
-  const quizzes = await quizApi.getQuizzes(token);
+  const { data: initialQuizzes, pagination } = await quizApi.getQuizzes(
+    1,
+    7,
+    token
+  );
   const translation = await getDictionary(locale);
 
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-  return <Quizzes quizzes={quizzes} translation={translation} />;
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  return (
+    <Quizzes
+      quizzes={initialQuizzes}
+      pagination={pagination}
+      translation={translation}
+    />
+  );
 };
 
 export default Page;
