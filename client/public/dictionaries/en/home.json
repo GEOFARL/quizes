@@ -47,7 +47,18 @@
     "question": "Question",
     "explanation": "Explanation",
     "downloadPDF": "Download PDF",
-    "searchPlaceholder": "Search questions"
+    "searchPlaceholder": "Search questions",
+    "saveQuiz": "Save Quiz"
+  },
+  "quiz": {
+    "modal": {
+      "title": "Save Quiz",
+      "description": "to not lose your generated questions",
+      "quizName": "Quiz Name",
+      "quizNamePlaceholder": "Enter quiz name",
+      "saving": "Saving...",
+      "save": "Save"
+    }
   },
   "reviews": {
     "title": "Our Reviews",

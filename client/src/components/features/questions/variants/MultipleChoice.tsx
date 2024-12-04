@@ -50,9 +50,6 @@ const MultipleChoice: React.FC<Props> = ({
     },
   });
 
-  if (question.id === "1") {
-    console.log("Question", question);
-  }
   const handleToggle = useCallback(
     (option: string, isChecked: boolean) => {
       const updatedAnswers = isChecked

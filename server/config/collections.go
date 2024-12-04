@@ -1,11 +1,13 @@
 package config
 
 type Collections struct {
-	Users string
+	Users   string
+	Quizzes string
 }
 
 func NewCollections() *Collections {
 	return &Collections{
-		Users: "users",
+		Users:   "users",
+		Quizzes: "quizzes",
 	}
 }

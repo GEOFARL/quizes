@@ -22,7 +22,6 @@ func GenerateJWT(user map[string]interface{}, secret string) (string, error) {
 	Logger.WithField("user", user).WithField("token", signedToken).Info("JWT generated successfully")
 	return signedToken, nil
 }
-
 func ValidateJWT(tokenString string, secret string) (map[string]interface{}, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -38,6 +37,17 @@ func ValidateJWT(tokenString string, secret string) (map[string]interface{}, err
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		Logger.WithField("user", claims["user"]).Info("JWT validated successfully")
+
+		if userMap, ok := claims["user"].(map[string]interface{}); ok {
+			if userID, ok := userMap["id"].(string); ok {
+				claims["user_id"] = userID
+			} else {
+				Logger.Warn("user.id is missing or not a string")
+			}
+		} else {
+			Logger.Warn("user claim is not a valid map")
+		}
+
 		return claims, nil
 	}
 

@@ -47,7 +47,18 @@
     "question": "Запитання",
     "explanation": "Пояснення",
     "downloadPDF": "Завантажити PDF",
-    "searchPlaceholder": "Пошук запитань"
+    "searchPlaceholder": "Пошук запитань",
+    "saveQuiz": "Зберегти Квіз"
+  },
+  "quiz": {
+    "modal": {
+      "title": "Зберегти вікторину",
+      "description": "Щоб не втратити згенеровані запитання",
+      "quizName": "Назва вікторини",
+      "quizNamePlaceholder": "Введіть назву вікторини",
+      "saving": "Збереження...",
+      "save": "Зберегти"
+    }
   },
   "reviews": {
     "title": "Наші відгуки",

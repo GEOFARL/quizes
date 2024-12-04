@@ -37,10 +37,6 @@ const SingleChoice: React.FC<Props> = ({
     onUpdateCorrectAnswers,
   });
 
-  if (question.id === "1") {
-    console.log("Question", question);
-  }
-
   const kebabToOriginalMap: Record<string, string> =
     question.options?.reduce(
       (map, option) => ({ ...map, [toKebabCase(option)]: option }),
@@ -71,12 +67,6 @@ const SingleChoice: React.FC<Props> = ({
         }}
       >
         {tempOptions?.map((option, index) => {
-          console.log("Option", option);
-          console.log(
-            toKebabCase(question.correctAnswers[0]),
-            toKebabCase(question.options?.[index] ?? "")
-          );
-
           return (
             <div
               className="flex items-center space-x-2"

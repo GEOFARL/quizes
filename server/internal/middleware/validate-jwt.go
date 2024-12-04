@@ -27,8 +27,16 @@ func ValidateJWT(secret string) gin.HandlerFunc {
 			return
 		}
 
-		c.Set("user_id", claims["user_id"])
-		utils.Logger.WithField("user_id", claims["user_id"]).Info("JWT validated successfully")
+		userID, ok := claims["user_id"].(string)
+		if !ok || userID == "" {
+			utils.Logger.Warn("Missing or invalid user_id in JWT claims")
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token payload"})
+			c.Abort()
+			return
+		}
+
+		c.Set("user_id", userID)
+		utils.Logger.WithField("user_id", userID).Info("JWT validated successfully")
 		c.Next()
 	}
 }

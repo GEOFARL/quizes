@@ -8,6 +8,7 @@ import { GenerateQuestionsResponse } from "@/types/questions/response";
 import downloadPDFQuestionsPDF from "@/lib/downloadQuestionsPDF";
 import { usePathname } from "next/navigation";
 import { useCallback, useState } from "react";
+import SaveQuizModal from "./SaveQuizModal";
 
 type Props = {
   questions: GenerateQuestionsResponse["questions"];
@@ -29,6 +30,7 @@ const Questions: React.FC<Props> = ({
   handleUpdateExplanation,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSaveQuizModalOpen, setIsSaveQuizModalOpen] = useState(false);
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const pathname = usePathname();
 
@@ -48,7 +50,7 @@ const Questions: React.FC<Props> = ({
 
   return (
     <div className="flex flex-col space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center space-y-2 sm:space-y-0 flex-col sm:flex-row">
         <Input
           type="text"
           value={searchQuery}
@@ -58,13 +60,18 @@ const Questions: React.FC<Props> = ({
           }
           className="max-w-md"
         />
-        {pathname.split("/")[1] === "en" && (
-          <Button
-            onClick={() => downloadPDFQuestionsPDF(translation, questions)}
-          >
-            {translation.home.questions.downloadPDF}
+        <div className="space-x-2">
+          {pathname.split("/")[1] === "en" && (
+            <Button
+              onClick={() => downloadPDFQuestionsPDF(translation, questions)}
+            >
+              {translation.home.questions.downloadPDF}
+            </Button>
+          )}
+          <Button onClick={() => setIsSaveQuizModalOpen(true)}>
+            {translation.home.questions.saveQuiz || "Save Quiz"}
           </Button>
-        )}
+        </div>
       </div>
 
       <QuestionList
@@ -77,6 +84,13 @@ const Questions: React.FC<Props> = ({
         onUpdateOptions={handleUpdateOptions}
         onUpdateTitle={handleUpdateTitle}
         onUpdateExplanation={handleUpdateExplanation}
+      />
+
+      <SaveQuizModal
+        questions={questions}
+        onClose={() => setIsSaveQuizModalOpen(false)}
+        isOpen={isSaveQuizModalOpen}
+        translation={translation}
       />
     </div>
   );
