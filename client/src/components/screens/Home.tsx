@@ -17,6 +17,7 @@ type Props = {
 
 const HomeScreen: React.FC<Props> = ({ translation, user }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [quizName, setQuizName] = useState<string | null>(null);
   const {
     questions,
     setQuestions,
@@ -55,14 +56,16 @@ const HomeScreen: React.FC<Props> = ({ translation, user }) => {
 
       {questions && (
         <Dialog
-          title={translation.home.questions.title}
-          description={translation.home.questions.description}
+          title={!quizName ? translation.home.questions.title : ""}
+          description={!quizName ? translation.home.questions.description : ""}
           open={isDialogOpen}
           onOpenChange={handleDialogClose}
           className="w-[90vw] md:max-w-[1200px] max-h-[85vh] overflow-auto"
         >
           <Questions
             questions={questions}
+            quizName={quizName}
+            setQuizName={setQuizName}
             translation={translation}
             deleteQuestion={deleteQuestion}
             handleUpdateExplanation={handleUpdateExplanation}

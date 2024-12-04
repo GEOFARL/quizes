@@ -17,13 +17,14 @@ import { saveQuizSchema } from "@/validations/save-quiz";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Dialog from "../auth/Dialog";
+import Dialog from "../../auth/Dialog";
 
 type Props = {
   questions: GenerateQuestionsResponse["questions"];
   translation: Dictionary;
   isOpen: boolean;
   onClose: () => void;
+  updateQuizName: (name: string) => void;
 };
 
 const SaveQuizModal: React.FC<Props> = ({
@@ -31,6 +32,7 @@ const SaveQuizModal: React.FC<Props> = ({
   isOpen,
   onClose,
   translation,
+  updateQuizName,
 }) => {
   const { mutate, isPending } = useSaveQuiz();
 
@@ -41,6 +43,7 @@ const SaveQuizModal: React.FC<Props> = ({
 
   const handleSave = form.handleSubmit((data) => {
     mutate(data, { onSuccess: onClose });
+    updateQuizName(data.name);
   });
 
   return (

@@ -48,7 +48,8 @@
     "explanation": "Пояснення",
     "downloadPDF": "Завантажити PDF",
     "searchPlaceholder": "Пошук запитань",
-    "saveQuiz": "Зберегти Квіз"
+    "saveQuiz": "Зберегти Квіз",
+    "viewAllQuizzes": "Переглянути всі квізи"
   },
   "quiz": {
     "modal": {

@@ -48,7 +48,8 @@
     "explanation": "Explanation",
     "downloadPDF": "Download PDF",
     "searchPlaceholder": "Search questions",
-    "saveQuiz": "Save Quiz"
+    "saveQuiz": "Save Quiz",
+    "viewAllQuizzes": "View All Quizzes"
   },
   "quiz": {
     "modal": {
