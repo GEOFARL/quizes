@@ -1,6 +1,7 @@
 import { SaveQuizPayload } from "@/types/quiz/payload";
 import { BaseApi } from "./base-api";
 import { autobind } from "@/lib/autobind";
+import { Quiz } from "@/types/quiz/quiz";
 
 class QuizApi extends BaseApi {
   constructor() {
@@ -12,6 +13,13 @@ class QuizApi extends BaseApi {
     return this.fetch<void>("/save", {
       method: "POST",
       body: JSON.stringify(payload),
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    });
+  }
+
+  async getQuizzes(token?: string): Promise<Quiz[]> {
+    return this.fetch<Quiz[]>("/", {
+      method: "GET",
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
   }

@@ -11,20 +11,20 @@ type Props = {
   question: GenerateQuestionsResponse["questions"][number];
   translation: Dictionary;
   highlight: string;
-  onDelete: (id: string) => void;
-  onUpdateCorrectAnswers: (id: string, correctAnswers: string[]) => void;
-  onUpdateTitle: (id: string, newTitle: string) => void;
-  onUpdateOptions: (id: string, newOptions: string[]) => void;
-  onUpdateExplanation: (id: string, newExplanation: string) => void;
+  onDelete?: (id: string) => void;
+  onUpdateCorrectAnswers?: (id: string, correctAnswers: string[]) => void;
+  onUpdateTitle?: (id: string, newTitle: string) => void;
+  onUpdateOptions?: (id: string, newOptions: string[]) => void;
+  onUpdateExplanation?: (id: string, newExplanation: string) => void;
 };
 
 const componentByType: Record<
   string,
   React.FC<{
     question: GenerateQuestionsResponse["questions"][number];
-    onUpdateCorrectAnswers: (correctAnswers: string[]) => void;
-    onUpdateOptions: (options: string[]) => void;
-    onUpdateTitle: (title: string) => void;
+    onUpdateCorrectAnswers?: (correctAnswers: string[]) => void;
+    onUpdateOptions?: (options: string[]) => void;
+    onUpdateTitle?: (title: string) => void;
     highlight: string;
   }>
 > = {
@@ -50,29 +50,44 @@ const QuestionCardWithActions: React.FC<Props> = ({
         question={question}
         translation={translation}
         highlight={highlight}
-        onUpdateExplanation={(explanation) =>
-          onUpdateExplanation(question.id, explanation)
+        onUpdateExplanation={
+          onUpdateExplanation
+            ? (explanation) => onUpdateExplanation(question.id, explanation)
+            : undefined
         }
       >
         <Component
           question={question}
           highlight={highlight}
-          onUpdateCorrectAnswers={(correctAnswers) =>
-            onUpdateCorrectAnswers(question.id, correctAnswers)
+          onUpdateCorrectAnswers={
+            onUpdateCorrectAnswers
+              ? (correctAnswers) =>
+                  onUpdateCorrectAnswers(question.id, correctAnswers)
+              : undefined
           }
-          onUpdateOptions={(options) => onUpdateOptions(question.id, options)}
-          onUpdateTitle={(title) => onUpdateTitle(question.id, title)}
+          onUpdateOptions={
+            onUpdateOptions
+              ? (options) => onUpdateOptions(question.id, options)
+              : undefined
+          }
+          onUpdateTitle={
+            onUpdateTitle
+              ? (title) => onUpdateTitle(question.id, title)
+              : undefined
+          }
         />
       </QuestionCard>
-      <div className="absolute top-[6px] right-[6px]">
-        <Button
-          variant="destructive"
-          className="h-[32px] w-[32px] [&_svg]:size-3"
-          onClick={() => onDelete(question.id)}
-        >
-          <Trash />
-        </Button>
-      </div>
+      {onDelete && (
+        <div className="absolute top-[6px] right-[6px]">
+          <Button
+            variant="destructive"
+            className="h-[32px] w-[32px] [&_svg]:size-3"
+            onClick={() => onDelete(question.id)}
+          >
+            <Trash />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

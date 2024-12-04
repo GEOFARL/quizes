@@ -9,9 +9,9 @@ import { PropsWithChildren } from "react";
 
 type Props = {
   question: GenerateQuestionsResponse["questions"][number];
-  onUpdateOptions: (options: string[]) => void;
-  onUpdateTitle: (newTitle: string) => void;
-  onUpdateCorrectAnswers: (newCorrectAnswers: string[]) => void;
+  onUpdateOptions?: (options: string[]) => void;
+  onUpdateTitle?: (newTitle: string) => void;
+  onUpdateCorrectAnswers?: (newCorrectAnswers: string[]) => void;
 } & PropsWithChildren;
 
 const EditTitle: React.FC<Props> = ({
@@ -36,7 +36,7 @@ const EditTitle: React.FC<Props> = ({
 
   return (
     <div className="flex items-center space-x-2 w-[95%]">
-      {isEditingQuestion ? (
+      {onUpdateTitle && isEditingQuestion ? (
         <EditText
           value={tempQuestion}
           cancelEditing={() => setIsEditingQuestion(false)}
@@ -46,14 +46,16 @@ const EditTitle: React.FC<Props> = ({
       ) : (
         <div className="flex items-center space-x-2 relative">
           {children}
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setIsEditingQuestion(true)}
-            className="absolute right-[-24px] top-[-8px] [&_svg]:size-3 p-1 h-[20px] w-[20px]"
-          >
-            <Edit />
-          </Button>
+          {onUpdateTitle && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setIsEditingQuestion(true)}
+              className="absolute right-[-24px] top-[-8px] [&_svg]:size-3 p-1 h-[20px] w-[20px]"
+            >
+              <Edit />
+            </Button>
+          )}
         </div>
       )}
     </div>

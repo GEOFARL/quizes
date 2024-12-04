@@ -8,11 +8,11 @@ type Props = {
   matches: number[];
   translation: Dictionary;
   highlight: string;
-  onDelete: (id: string) => void;
-  onUpdateCorrectAnswers: (id: string, correctAnswers: string[]) => void;
-  onUpdateTitle: (id: string, newTitle: string) => void;
-  onUpdateOptions: (id: string, newOptions: string[]) => void;
-  onUpdateExplanation: (id: string, newExplanation: string) => void;
+  onDelete?: (id: string) => void;
+  onUpdateCorrectAnswers?: (id: string, correctAnswers: string[]) => void;
+  onUpdateTitle?: (id: string, newTitle: string) => void;
+  onUpdateOptions?: (id: string, newOptions: string[]) => void;
+  onUpdateExplanation?: (id: string, newExplanation: string) => void;
 };
 
 const QuestionList: React.FC<Props> = ({

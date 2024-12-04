@@ -12,9 +12,9 @@ import { Edit } from "lucide-react";
 type Props = {
   question: GenerateQuestionsResponse["questions"][number];
   highlight: string;
-  onUpdateCorrectAnswers: (correctAnswers: string[]) => void;
-  onUpdateOptions: (options: string[]) => void;
-  onUpdateTitle: (newTitle: string) => void;
+  onUpdateCorrectAnswers?: (correctAnswers: string[]) => void;
+  onUpdateOptions?: (options: string[]) => void;
+  onUpdateTitle?: (newTitle: string) => void;
 };
 
 const SingleChoice: React.FC<Props> = ({
@@ -62,7 +62,7 @@ const SingleChoice: React.FC<Props> = ({
         onValueChange={(kebabValue) => {
           const originalValue = kebabToOriginalMap[kebabValue];
           if (originalValue) {
-            onUpdateCorrectAnswers([originalValue]);
+            onUpdateCorrectAnswers?.([originalValue]);
           }
         }}
       >
@@ -77,7 +77,7 @@ const SingleChoice: React.FC<Props> = ({
                 id={toKebabCase(option)}
               />
               <div className="flex items-center space-x-2 w-full group">
-                {editingOptionIndex === index ? (
+                {onUpdateOptions && editingOptionIndex === index ? (
                   <EditText
                     value={tempOptions[index]}
                     cancelEditing={() => {
@@ -100,14 +100,16 @@ const SingleChoice: React.FC<Props> = ({
                     <Label htmlFor={toKebabCase(option)}>
                       <HighlightText text={option} highlight={highlight} />
                     </Label>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => setEditingOptionIndex(index)}
-                      className="opacity-0 group-hover:opacity-100 absolute right-[-24px] top-[-8px] [&_svg]:size-3 p-1 h-[20px] w-[20px]"
-                    >
-                      <Edit />
-                    </Button>
+                    {onUpdateOptions && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setEditingOptionIndex(index)}
+                        className="opacity-0 group-hover:opacity-100 absolute right-[-24px] top-[-8px] [&_svg]:size-3 p-1 h-[20px] w-[20px]"
+                      >
+                        <Edit />
+                      </Button>
+                    )}
                   </div>
                 )}
               </div>

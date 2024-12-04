@@ -8,9 +8,9 @@ import (
 )
 
 type Quiz struct {
-	ID        primitive.ObjectID  `bson:"_id,omitempty"`
-	UserID    primitive.ObjectID  `bson:"userId"`
-	Name      string              `bson:"name"`
-	Questions []question.Question `bson:"questions"`
-	CreatedAt time.Time           `bson:"createdAt"`
+	ID        primitive.ObjectID  `bson:"_id,omitempty" json:"id"`
+	UserID    primitive.ObjectID  `bson:"userId" json:"userId"`
+	Name      string              `bson:"name" json:"name"`
+	Questions []question.Question `bson:"questions" json:"questions"`
+	CreatedAt time.Time           `bson:"createdAt" json:"createdAt"`
 }

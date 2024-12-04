@@ -25,9 +25,9 @@ import useEditQuestion from "@/hooks/questions/use-edit-question";
 type Props = {
   question: GenerateQuestionsResponse["questions"][number];
   highlight: string;
-  onUpdateCorrectAnswers: (correctAnswers: string[]) => void;
-  onUpdateOptions: (options: string[]) => void;
-  onUpdateTitle: (newTitle: string) => void;
+  onUpdateCorrectAnswers?: (correctAnswers: string[]) => void;
+  onUpdateOptions?: (options: string[]) => void;
+  onUpdateTitle?: (newTitle: string) => void;
 };
 
 const FormSchema = z.object({
@@ -56,7 +56,7 @@ const MultipleChoice: React.FC<Props> = ({
         ? [...question.correctAnswers, option]
         : question.correctAnswers.filter((answer) => answer !== option);
 
-      onUpdateCorrectAnswers(updatedAnswers);
+      onUpdateCorrectAnswers?.(updatedAnswers);
     },
     [question]
   );
@@ -137,7 +137,7 @@ const MultipleChoice: React.FC<Props> = ({
                           </FormControl>
 
                           <div className="flex items-center space-x-2 w-full group">
-                            {editingOptionIndex === index ? (
+                            {onUpdateOptions && editingOptionIndex === index ? (
                               <EditText
                                 value={tempOptions[index]}
                                 cancelEditing={() => {
@@ -178,14 +178,16 @@ const MultipleChoice: React.FC<Props> = ({
                                     highlight={highlight}
                                   />
                                 </FormLabel>
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  onClick={() => setEditingOptionIndex(index)}
-                                  className="opacity-0 group-hover:opacity-100 absolute right-[-24px] top-[-8px] [&_svg]:size-3 p-1 h-[20px] w-[20px]"
-                                >
-                                  <Edit />
-                                </Button>
+                                {onUpdateOptions && (
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setEditingOptionIndex(index)}
+                                    className="opacity-0 group-hover:opacity-100 absolute right-[-24px] top-[-8px] [&_svg]:size-3 p-1 h-[20px] w-[20px]"
+                                  >
+                                    <Edit />
+                                  </Button>
+                                )}
                               </div>
                             )}
                           </div>

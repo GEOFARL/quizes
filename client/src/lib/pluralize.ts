@@ -34,3 +34,14 @@ export const pluralize = (
 
   return `${count} ${form}`;
 };
+
+export const pluralizationRules: Record<string, (count: number) => number> = {
+  en: (count: number) => (count === 1 ? 0 : 1),
+  uk: (count: number) => {
+    const mod10 = count % 10;
+    const mod100 = count % 100;
+    if (mod10 === 1 && mod100 !== 11) return 0;
+    if (mod10 >= 2 && mod10 <= 4 && !(mod100 >= 12 && mod100 <= 14)) return 1;
+    return 2;
+  },
+};

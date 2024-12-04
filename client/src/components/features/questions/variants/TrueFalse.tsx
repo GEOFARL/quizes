@@ -8,9 +8,9 @@ import EditTitle from "../edit/EditTitle";
 type Props = {
   question: GenerateQuestionsResponse["questions"][number];
   highlight: string;
-  onUpdateCorrectAnswers: (correctAnswers: string[]) => void;
-  onUpdateOptions: (options: string[]) => void;
-  onUpdateTitle: (newTitle: string) => void;
+  onUpdateCorrectAnswers?: (correctAnswers: string[]) => void;
+  onUpdateOptions?: (options: string[]) => void;
+  onUpdateTitle?: (newTitle: string) => void;
 };
 
 const TrueFalse: React.FC<Props> = ({
@@ -21,7 +21,7 @@ const TrueFalse: React.FC<Props> = ({
   onUpdateTitle,
 }) => {
   const handleToggle = useCallback((option: string) => {
-    onUpdateCorrectAnswers([option]);
+    onUpdateCorrectAnswers?.([option]);
   }, []);
 
   return (

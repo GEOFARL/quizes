@@ -1,0 +1,10 @@
+{
+  "title": "My Quizzes",
+  "card": {
+    "viewQuestions": "View Questions",
+    "questionsForms": {
+      "forms": ["question", "questions"],
+      "ruleKey": "en"
+    }
+  }
+}

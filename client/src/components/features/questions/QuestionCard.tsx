@@ -12,7 +12,7 @@ type Props = {
   question: GenerateQuestionsResponse["questions"][number];
   translation: Dictionary;
   highlight: string;
-  onUpdateExplanation: (explanation: string) => void;
+  onUpdateExplanation?: (explanation: string) => void;
 } & PropsWithChildren;
 
 const QuestionCard: React.FC<Props> = ({
@@ -51,7 +51,7 @@ const QuestionCard: React.FC<Props> = ({
             </CardHeader>
             <CardContent className="pt-0 px-4 pb-3">
               <div className="flex items-center space-x-2 w-[95%]">
-                {isEditingExplanation ? (
+                {onUpdateExplanation && isEditingExplanation ? (
                   <EditText
                     value={tempExplanation}
                     cancelEditing={() => setIsEditingExplanation(false)}
@@ -66,14 +66,16 @@ const QuestionCard: React.FC<Props> = ({
                         highlight={highlight}
                       />
                     </p>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => setIsEditingExplanation(true)}
-                      className="absolute right-[-24px] top-[-8px] [&_svg]:size-3 p-1 h-[20px] w-[20px]"
-                    >
-                      <Edit />
-                    </Button>
+                    {onUpdateExplanation && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setIsEditingExplanation(true)}
+                        className="absolute right-[-24px] top-[-8px] [&_svg]:size-3 p-1 h-[20px] w-[20px]"
+                      >
+                        <Edit />
+                      </Button>
+                    )}
                   </div>
                 )}
               </div>

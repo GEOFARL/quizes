@@ -12,11 +12,15 @@ const loadDictionary = async (lang: string): Promise<Dictionary> => {
     `../../../public/dictionaries/${lang}/global.json`
   );
   const auth = await import(`../../../public/dictionaries/${lang}/auth.json`);
+  const quizzes = await import(
+    `../../../public/dictionaries/${lang}/quizzes.json`
+  );
 
   return {
     home: home.default,
     global: global.default,
     auth: auth.default,
+    quizzes: quizzes.default,
   };
 };
 

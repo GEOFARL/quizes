@@ -15,12 +15,12 @@ type Props = {
   questions: GenerateQuestionsResponse["questions"];
   translation: Dictionary;
   quizName: string | null;
-  setQuizName: (name: string | null) => void;
-  deleteQuestion: (id: string) => void;
-  updateCorrectAnswers: (id: string, correctAnswers: string[]) => void;
-  handleUpdateOptions: (id: string, newOptions: string[]) => void;
-  handleUpdateTitle: (id: string, newTitle: string) => void;
-  handleUpdateExplanation: (id: string, newExplanation: string) => void;
+  setQuizName?: (name: string | null) => void;
+  deleteQuestion?: (id: string) => void;
+  updateCorrectAnswers?: (id: string, correctAnswers: string[]) => void;
+  handleUpdateOptions?: (id: string, newOptions: string[]) => void;
+  handleUpdateTitle?: (id: string, newTitle: string) => void;
+  handleUpdateExplanation?: (id: string, newExplanation: string) => void;
 };
 
 const Questions: React.FC<Props> = ({
@@ -95,13 +95,15 @@ const Questions: React.FC<Props> = ({
         onUpdateExplanation={handleUpdateExplanation}
       />
 
-      <SaveQuizModal
-        questions={questions}
-        onClose={() => setIsSaveQuizModalOpen(false)}
-        isOpen={isSaveQuizModalOpen}
-        updateQuizName={setQuizName}
-        translation={translation}
-      />
+      {setQuizName && (
+        <SaveQuizModal
+          questions={questions}
+          onClose={() => setIsSaveQuizModalOpen(false)}
+          isOpen={isSaveQuizModalOpen}
+          updateQuizName={setQuizName}
+          translation={translation}
+        />
+      )}
     </div>
   );
 };
