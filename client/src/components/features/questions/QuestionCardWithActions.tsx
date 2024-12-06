@@ -1,11 +1,10 @@
-import { Trash } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import QuestionCard from "./QuestionCard";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 import { Dictionary } from "@/types/dictionary";
 import SingleChoice from "./variants/SingleChoice";
 import MultipleChoice from "./variants/MultipleChoice";
 import TrueFalse from "./variants/TrueFalse";
+import DeleteButton from "@/components/common/button/Delete";
 
 type Props = {
   question: GenerateQuestionsResponse["questions"][number];
@@ -79,13 +78,7 @@ const QuestionCardWithActions: React.FC<Props> = ({
       </QuestionCard>
       {onDelete && (
         <div className="absolute top-[6px] right-[6px]">
-          <Button
-            variant="destructive"
-            className="h-[32px] w-[32px] [&_svg]:size-3"
-            onClick={() => onDelete(question.id)}
-          >
-            <Trash />
-          </Button>
+          <DeleteButton onClick={() => onDelete(question.id)} />
         </div>
       )}
     </div>

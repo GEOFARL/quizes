@@ -5,6 +5,9 @@
     "questionsForms": {
       "forms": ["question", "questions"],
       "ruleKey": "en"
+    },
+    "confirmDelete": {
+      "message": "Are you sure you want to delete this quiz? This action cannot be undone."
     }
   }
 }

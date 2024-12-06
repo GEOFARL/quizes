@@ -14,4 +14,5 @@ func Register(router *gin.Engine, quizHandler *quiz.Handler, ctx *context.Contex
 
 	quizRoutes.POST("/save", quizHandler.SaveQuiz)
 	quizRoutes.GET("", quizHandler.GetQuizzes)
+	quizRoutes.DELETE("/:quiz_id", quizHandler.DeleteQuiz)
 }

@@ -9,5 +9,16 @@
     "light": "Світла",
     "dark": "Темна"
   },
-  "language": "Мова"
+  "language": "Мова",
+  "modals": {
+    "confirm": {
+      "title": "Підтвердження",
+      "confirm": "Підтвердити",
+      "cancel": "Скасувати"
+    }
+  },
+  "pagination": {
+    "previous": "Попередня",
+    "next": "Наступна"
+  }
 }

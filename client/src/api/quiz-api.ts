@@ -1,8 +1,7 @@
-import { SaveQuizPayload } from "@/types/quiz/payload";
-import { BaseApi } from "./base-api";
 import { autobind } from "@/lib/autobind";
-import { Quiz } from "@/types/quiz/quiz";
+import { SaveQuizPayload } from "@/types/quiz/payload";
 import { GetQuizzesResponse } from "@/types/quiz/response";
+import { BaseApi } from "./base-api";
 
 class QuizApi extends BaseApi {
   constructor() {
@@ -29,6 +28,13 @@ class QuizApi extends BaseApi {
         page,
         limit,
       },
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    });
+  }
+
+  async deleteQuiz(quizId: string, token?: string) {
+    return this.fetch<void>(`/${quizId}`, {
+      method: "DELETE",
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
   }

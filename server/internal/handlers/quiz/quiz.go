@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Handler struct {
@@ -61,4 +62,24 @@ func (h *Handler) GetQuizzes(c *gin.Context) {
 		"data":       quizzes,
 		"pagination": updatedPagination,
 	})
+}
+
+func (h *Handler) DeleteQuiz(c *gin.Context) {
+	quizID := c.Param("quiz_id")
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	if err := h.quizService.DeleteQuiz(userID.(string), quizID); err != nil {
+		if err == mongo.ErrNoDocuments {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Quiz not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Quiz deleted successfully"})
 }

@@ -30,6 +30,7 @@ const Page: React.FC<Props> = async ({ params }) => {
     token
   );
   const translation = await getDictionary(locale);
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 
   return (
     <Quizzes

@@ -41,3 +41,17 @@ func (s *Service) GetUserQuizzes(userID string, pagination utils.Pagination) ([]
 	pagination.Total = int(total)
 	return quizzes, pagination, nil
 }
+
+func (s *Service) DeleteQuiz(userID string, quizID string) error {
+	quizObjectID, err := primitive.ObjectIDFromHex(quizID)
+	if err != nil {
+		return errors.New("invalid quiz ID")
+	}
+
+	userObjectID, err := primitive.ObjectIDFromHex(userID)
+	if err != nil {
+		return errors.New("invalid user ID")
+	}
+
+	return s.repo.DeleteQuiz(userObjectID, quizObjectID)
+}

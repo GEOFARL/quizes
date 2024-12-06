@@ -1,7 +1,8 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import QuestionCardWithActions from "./QuestionCardWithActions";
 import { GenerateQuestionsResponse } from "@/types/questions/response";
 import { Dictionary } from "@/types/dictionary";
+import Animated from "@/components/common/Animated";
 
 type Props = {
   questions: GenerateQuestionsResponse["questions"];
@@ -29,12 +30,8 @@ const QuestionList: React.FC<Props> = ({
   return (
     <AnimatePresence>
       {questions.map((question, index) => (
-        <motion.div
+        <Animated
           key={question.id}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.5, rotate: -15, x: -200 }}
-          transition={{ duration: 0.5 }}
           className={
             matches.includes(index) ? "border-l-4 border-yellow-500" : ""
           }
@@ -49,7 +46,7 @@ const QuestionList: React.FC<Props> = ({
             onUpdateOptions={onUpdateOptions}
             onUpdateExplanation={onUpdateExplanation}
           />
-        </motion.div>
+        </Animated>
       ))}
     </AnimatePresence>
   );

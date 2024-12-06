@@ -67,3 +67,24 @@ func (r *Repository) CountQuizzesByUser(userID string) (int64, error) {
 	filter := bson.M{"userId": objectID}
 	return r.collection.CountDocuments(context.Background(), filter)
 }
+
+func (r *Repository) DeleteQuiz(userID primitive.ObjectID, quizID primitive.ObjectID) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{
+		"_id":    quizID,
+		"userId": userID,
+	}
+
+	result, err := r.collection.DeleteOne(ctx, filter)
+	if err != nil {
+		return err
+	}
+
+	if result.DeletedCount == 0 {
+		return mongo.ErrNoDocuments
+	}
+
+	return nil
+}

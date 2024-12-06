@@ -7,12 +7,14 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Dictionary } from "@/types/dictionary";
 
 type PaginationProps = {
   totalPages: number;
   currentPage: number;
   onPageChange: (page: number) => void;
   maxVisiblePages?: number;
+  translation: Dictionary;
 };
 
 const PaginationComponent: React.FC<PaginationProps> = ({
@@ -20,6 +22,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
   currentPage,
   onPageChange,
   maxVisiblePages = 3,
+  translation,
 }) => {
   const handlePageClick = (page: number) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -84,6 +87,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
               e.preventDefault();
               if (currentPage > 1) onPageChange(currentPage - 1);
             }}
+            translation={translation}
           />
         </PaginationItem>
 
@@ -96,6 +100,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
               e.preventDefault();
               if (currentPage < totalPages) onPageChange(currentPage + 1);
             }}
+            translation={translation}
           />
         </PaginationItem>
       </PaginationContent>

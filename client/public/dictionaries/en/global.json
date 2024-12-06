@@ -9,5 +9,16 @@
     "light": "Light",
     "dark": "Dark"
   },
-  "language": "Language"
+  "language": "Language",
+  "modals": {
+    "confirm": {
+      "title": "Confirm",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    }
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  }
 }

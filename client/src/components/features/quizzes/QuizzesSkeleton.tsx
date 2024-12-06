@@ -6,7 +6,7 @@ const QuizzesSkeleton: React.FC = () => (
     {[...Array(7)].map((_, i) => (
       <div
         key={i}
-        className="border rounded-lg space-y-2 shadow-sm w-full h-[117px]"
+        className="border rounded-lg space-y-2 shadow-sm w-full h-[117px] relative"
       >
         <div className="p-4">
           <Skeleton className="w-1/2 h-[28px]" />
@@ -15,6 +15,7 @@ const QuizzesSkeleton: React.FC = () => (
           <Skeleton className="w-[80px] h-[20px]" />
           <Skeleton className="w-[140px] h-[40px]" />
         </div>
+        <Skeleton className="absolute top-[6px] right-[6px] w-[32px] h-[32px]" />
       </div>
     ))}
 
