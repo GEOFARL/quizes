@@ -19,7 +19,12 @@ func New(quizService *quiz.Service) *Handler {
 }
 
 func (h *Handler) SaveQuiz(c *gin.Context) {
-	var req models.Quiz
+	var req struct {
+		models.Quiz
+		CategoryID  string           `json:"categoryId"`
+		NewCategory *models.Category `json:"newCategory,omitempty"`
+	}
+
 	userID, exists := c.Get("user_id")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -31,12 +36,16 @@ func (h *Handler) SaveQuiz(c *gin.Context) {
 		return
 	}
 
-	if err := h.quizService.SaveQuiz(userID.(string), req); err != nil {
+	categoryID, err := h.quizService.SaveQuizWithCategory(userID.(string), req.Quiz, req.CategoryID, req.NewCategory)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "Quiz saved successfully"})
+	c.JSON(http.StatusCreated, gin.H{
+		"message":    "Quiz saved successfully",
+		"categoryId": categoryID,
+	})
 }
 
 func (h *Handler) GetQuizzes(c *gin.Context) {

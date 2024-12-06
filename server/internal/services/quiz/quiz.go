@@ -3,6 +3,7 @@ package quiz
 import (
 	"auth-service/internal/models"
 	repository "auth-service/internal/repositories/quiz"
+	"auth-service/internal/services/category"
 	"auth-service/internal/utils"
 	"errors"
 
@@ -10,21 +11,46 @@ import (
 )
 
 type Service struct {
-	repo repository.Repository
+	repo            repository.Repository
+	categoryService *category.Service
 }
 
-func New(repo repository.Repository) *Service {
-	return &Service{repo: repo}
+func New(repo repository.Repository, categoryService *category.Service) *Service {
+	return &Service{repo: repo, categoryService: categoryService}
 }
 
-func (s *Service) SaveQuiz(userID string, quiz models.Quiz) error {
+func (s *Service) SaveQuizWithCategory(userID string, quiz models.Quiz, categoryID string, newCategory *models.Category) (string, error) {
 	userObjectID, err := primitive.ObjectIDFromHex(userID)
 	if err != nil {
-		return errors.New("invalid user ID")
+		return "", errors.New("invalid user ID")
+	}
+
+	if newCategory != nil {
+		newCategory.UserID = userObjectID
+		newCategoryID, err := s.categoryService.CreateCategory(newCategory)
+		if err != nil {
+			return "", err
+		}
+		categoryID = newCategoryID
+	}
+
+	if categoryID != "" {
+		categoryObjectID, err := primitive.ObjectIDFromHex(categoryID)
+		if err != nil {
+			return "", errors.New("invalid category ID")
+		}
+		quiz.CategoryID = categoryObjectID
+	} else {
+		return "", errors.New("category ID is required")
 	}
 
 	quiz.UserID = userObjectID
-	return s.repo.SaveQuiz(quiz)
+	err = s.repo.SaveQuiz(quiz)
+	if err != nil {
+		return "", err
+	}
+
+	return categoryID, nil
 }
 
 func (s *Service) GetUserQuizzes(userID string, pagination utils.Pagination) ([]models.Quiz, utils.Pagination, error) {

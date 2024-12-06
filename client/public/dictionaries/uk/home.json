@@ -32,7 +32,13 @@
         "ruleKey": "uk"
       },
       "difficulty": "Складність",
-      "difficultyLevels": ["Легко", "Середньо", "Важко", "Дуже важко", "Експерт"],
+      "difficultyLevels": [
+        "Легко",
+        "Середньо",
+        "Важко",
+        "Дуже важко",
+        "Експерт"
+      ],
       "includeExplanations": "Додати Пояснення",
       "questionTypes": {
         "title": "Типи Запитань",
@@ -56,10 +62,16 @@
   },
   "quiz": {
     "modal": {
-      "title": "Зберегти вікторину",
-      "description": "Щоб не втратити згенеровані запитання",
-      "quizName": "Назва вікторини",
-      "quizNamePlaceholder": "Введіть назву вікторини",
+      "title": "Зберегти Вікторину",
+      "description": "Заповніть дані нижче, щоб зберегти вашу вікторину.",
+      "quizName": "Назва Вікторини",
+      "quizNamePlaceholder": "Введіть назву вашої вікторини",
+      "category": "Категорія",
+      "selectCategory": "Виберіть категорію",
+      "newCategory": "Створити Нову Категорію",
+      "newCategoryName": "Назва Нової Категорії",
+      "newCategoryNamePlaceholder": "Введіть назву категорії",
+      "newCategoryColor": "Колір Категорії",
       "saving": "Збереження...",
       "save": "Зберегти"
     }

@@ -3,9 +3,11 @@ package quiz
 import (
 	"auth-service/internal/context"
 	handler "auth-service/internal/handlers/quiz"
-	repository "auth-service/internal/repositories/quiz"
+	categoryRepo "auth-service/internal/repositories/category"
+	quizRepo "auth-service/internal/repositories/quiz"
 	"auth-service/internal/routes/quiz"
-	service "auth-service/internal/services/quiz"
+	categoryService "auth-service/internal/services/category"
+	quizService "auth-service/internal/services/quiz"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -24,9 +26,22 @@ func New(ctx *context.Context) *Module {
 }
 
 func (m *Module) Init() error {
-	repo := repository.NewQuizRepository(m.context.DB.(*mongo.Client), m.context.Config.DBName, m.context.Config.Collections.Quizzes)
-	quizService := service.New(*repo)
-	m.handler = handler.New(quizService)
+	quizRepository := quizRepo.NewQuizRepository(
+		m.context.DB.(*mongo.Client),
+		m.context.Config.DBName,
+		m.context.Config.Collections.Quizzes,
+	)
+
+	categoryRepository := categoryRepo.NewCategoryRepository(
+		m.context.DB.(*mongo.Client),
+		m.context.Config.DBName,
+		m.context.Config.Collections.Categories,
+	)
+
+	categorySvc := categoryService.New(categoryRepository)
+	quizSvc := quizService.New(*quizRepository, categorySvc)
+
+	m.handler = handler.New(quizSvc)
 	return nil
 }
 

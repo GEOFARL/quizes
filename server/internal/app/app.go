@@ -5,6 +5,7 @@ import (
 	"auth-service/internal/middleware"
 	"auth-service/internal/modules"
 	authModule "auth-service/internal/modules/auth"
+	categoryModule "auth-service/internal/modules/category"
 	questionModule "auth-service/internal/modules/question"
 	quizModule "auth-service/internal/modules/quiz"
 	"auth-service/internal/utils"
@@ -48,6 +49,7 @@ func InitializeApp(ctx *context.Context) *App {
 		authModule.New(ctx),
 		questionModule.New(ctx),
 		quizModule.New(ctx),
+		categoryModule.New(ctx),
 	}
 
 	if err := app.RegisterModules(modules...); err != nil {

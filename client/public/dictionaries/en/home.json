@@ -57,9 +57,15 @@
   "quiz": {
     "modal": {
       "title": "Save Quiz",
-      "description": "to not lose your generated questions",
+      "description": "Fill in the details below to save your quiz.",
       "quizName": "Quiz Name",
-      "quizNamePlaceholder": "Enter quiz name",
+      "quizNamePlaceholder": "Enter your quiz name",
+      "category": "Category",
+      "selectCategory": "Select a category",
+      "newCategory": "Create New Category",
+      "newCategoryName": "New Category Name",
+      "newCategoryNamePlaceholder": "Enter category name",
+      "newCategoryColor": "Category Color",
       "saving": "Saving...",
       "save": "Save"
     }

@@ -10,6 +10,7 @@ import { useCallback, useState } from "react";
 import QuestionList from "./QuestionList";
 import SaveQuizModal from "./quiz/SaveQuizModal";
 import QuizHeader from "./quiz/QuizHeader";
+import { useCategories } from "@/hooks/categories/use-categories";
 
 type Props = {
   questions: GenerateQuestionsResponse["questions"];
@@ -52,6 +53,8 @@ const Questions: React.FC<Props> = ({
     debouncedSearchQuery,
     generateSearchableContent
   );
+
+  const { data: categories, isLoading: isCategoriesLoading } = useCategories();
 
   return (
     <div className="flex flex-col space-y-6">
@@ -102,6 +105,7 @@ const Questions: React.FC<Props> = ({
           isOpen={isSaveQuizModalOpen}
           updateQuizName={setQuizName}
           translation={translation}
+          categories={isCategoriesLoading ? [] : categories?.data ?? []}
         />
       )}
     </div>
