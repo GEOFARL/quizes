@@ -2,7 +2,10 @@
   "title": "Quizzes",
   "hero": {
     "title": "Questions Generator",
-    "description": "Enter a passage of text, and let our generator create a list of interactive and insightful questions for you to use. Perfect for quizzes, exams, or just expanding knowledge!"
+    "description": "Enter a passage of text, and let our generator create a list of interactive and insightful questions for you to use. Perfect for quizzes, exams, or just expanding knowledge!",
+    "nav": {
+      "saved": "Saved"
+    }
   },
   "generate-question-form": {
     "input-placeholder": "Type your message here",
