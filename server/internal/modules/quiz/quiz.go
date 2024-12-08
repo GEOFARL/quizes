@@ -36,6 +36,7 @@ func (m *Module) Init() error {
 		m.context.DB.(*mongo.Client),
 		m.context.Config.DBName,
 		m.context.Config.Collections.Categories,
+		m.context.Config.Collections.DefaultCategories,
 	)
 
 	categorySvc := categoryService.New(categoryRepository)

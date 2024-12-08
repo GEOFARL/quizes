@@ -247,7 +247,9 @@ const GenerateQuestionsForm: React.FC<Props> = ({
           openQuestions={openQuestions}
         />
       )}
-      {!deserializedUser && <UnauthorizedOverlay translation={translation} />}
+      {!deserializedUser.id() && (
+        <UnauthorizedOverlay translation={translation} />
+      )}
     </div>
   );
 };

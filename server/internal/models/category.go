@@ -8,7 +8,7 @@ import (
 
 type Category struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	UserID    primitive.ObjectID `bson:"userId" json:"userId"`
+	UserID    primitive.ObjectID `bson:"userId,omitempty" json:"userId"`
 	Name      string             `bson:"name" json:"name"`
 	Color     string             `bson:"color" json:"color"`
 	CreatedAt time.Time          `bson:"createdAt" json:"createdAt"`

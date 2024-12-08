@@ -28,6 +28,7 @@ func (m *Module) Init() error {
 		m.context.DB.(*mongo.Client),
 		m.context.Config.DBName,
 		m.context.Config.Collections.Categories,
+		m.context.Config.Collections.DefaultCategories,
 	)
 	categoryService := service.New(repo)
 	m.handler = handler.NewHandler(categoryService)
