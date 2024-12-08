@@ -6,14 +6,21 @@ import getToken from "@/lib/getToken";
 export const useQuizzes = (
   page: number,
   limit: number,
-  initialData?: GetQuizzesResponse
+  initialData?: GetQuizzesResponse,
+  filters?: { categories?: string[] }
 ) => {
   const queryClient = useQueryClient();
 
+  console.log("Filters", filters);
   const query = useQuery<GetQuizzesResponse, Error>({
     queryKey: ["quizzes", page, limit],
     queryFn: async () =>
-      await quizApi.getQuizzes(page, limit, await getToken()),
+      await quizApi.getQuizzes(
+        page,
+        limit,
+        await getToken(),
+        filters?.categories
+      ),
     initialData: page === 1 ? initialData : undefined,
     staleTime: 1000,
   });
@@ -30,6 +37,7 @@ export const useQuizzes = (
         "quizzes",
         page,
         limit,
+        filters?.categories ?? [],
       ]);
       if (previousData) {
         queryClient.setQueryData(["quizzes", page, limit], {

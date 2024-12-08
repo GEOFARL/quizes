@@ -23,9 +23,16 @@ const QuizCard: React.FC<Props> = ({
   onDelete,
 }) => {
   const handleDialogClose = () => setOpenQuizId(null);
+  const categoryColor = quiz.category?.color || "#f0f0f0";
 
   return (
-    <Card key={quiz.id} className="w-full shadow-md border rounded-lg relative">
+    <Card
+      key={quiz.id}
+      className="w-full shadow-md border rounded-lg relative"
+      style={{
+        backgroundColor: `${categoryColor}50`,
+      }}
+    >
       <CardHeader className="p-4">
         <CardTitle className="text-xl font-semibold">{quiz.name}</CardTitle>
       </CardHeader>

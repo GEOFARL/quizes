@@ -12,7 +12,14 @@ class QuizApi extends BaseApi {
   async saveQuiz(payload: SaveQuizPayload, token?: string): Promise<void> {
     return this.fetch<void>("/save", {
       method: "POST",
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        categoryId: payload.categoryId,
+        newCategory: payload.newCategory,
+        quiz: {
+          name: payload.name,
+          questions: payload.questions,
+        },
+      }),
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
   }
@@ -20,13 +27,15 @@ class QuizApi extends BaseApi {
   async getQuizzes(
     page: number = 1,
     limit: number = 10,
-    token?: string
+    token?: string,
+    categoryIDs?: string[]
   ): Promise<GetQuizzesResponse> {
     return this.fetch<GetQuizzesResponse>("/", {
       method: "GET",
       queryParams: {
         page,
         limit,
+        categories: categoryIDs?.join(","),
       },
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });

@@ -5,6 +5,8 @@ import (
 	"auth-service/internal/services/quiz"
 	"auth-service/internal/utils"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -46,17 +48,25 @@ func (h *Handler) SaveQuiz(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.Logger.WithError(err).Error("Failed to bind request JSON")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
 	}
 
 	utils.Logger.WithFields(logrus.Fields{
-		"userID":      userObjectID,
+		"userID":      userObjectID.Hex(),
 		"quiz":        req.Quiz,
 		"newCategory": req.NewCategory,
 		"categoryID":  req.CategoryID,
-	}).Info("Saving quiz with category")
+	}).Info("Received SaveQuiz request")
 
+	// Validate required fields
+	if req.Quiz.Name == "" || len(req.Quiz.Questions) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Quiz name and questions are required"})
+		return
+	}
+
+	req.Quiz.UserID = userObjectID
 	if req.NewCategory != nil {
 		req.NewCategory.UserID = userObjectID
 	}
@@ -86,13 +96,32 @@ func (h *Handler) GetQuizzes(c *gin.Context) {
 		return
 	}
 
-	pagination, err := utils.GetPagination(c, 1, 10)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	page := c.DefaultQuery("page", "1")
+	limit := c.DefaultQuery("limit", "10")
+	categoriesParam := c.Query("categories")
+
+	var categories []string
+	if categoriesParam != "" {
+		categories = strings.Split(categoriesParam, ",")
+	}
+
+	pageNum, err := strconv.Atoi(page)
+	if err != nil || pageNum < 1 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid page number"})
 		return
 	}
 
-	quizzes, updatedPagination, err := h.quizService.GetUserQuizzes(userID.(string), pagination)
+	limitNum, err := strconv.Atoi(limit)
+	if err != nil || limitNum < 1 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid limit number"})
+		return
+	}
+
+	quizzes, pagination, err := h.quizService.GetUserQuizzes(
+		userID.(string),
+		utils.NewPagination(pageNum, limitNum),
+		categories,
+	)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -100,7 +129,7 @@ func (h *Handler) GetQuizzes(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"data":       quizzes,
-		"pagination": updatedPagination,
+		"pagination": pagination,
 	})
 }
 

@@ -20,5 +20,10 @@
   "pagination": {
     "previous": "Previous",
     "next": "Next"
+  },
+  "multiSelect": {
+    "selectCategories": "Select categories",
+    "deselectAll": "Deselect all",
+    "selectAll": "Select all"
   }
 }

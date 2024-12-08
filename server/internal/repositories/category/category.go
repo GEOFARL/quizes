@@ -4,6 +4,7 @@ import (
 	"auth-service/internal/models"
 	"auth-service/internal/utils"
 	"context"
+	"errors"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -59,11 +60,21 @@ func (r *MongoRepository) SaveCategory(category *models.Category) error {
 	utils.Logger.WithField("categoryInsert", category).Info("Inserting category into MongoDB")
 
 	category.CreatedAt = time.Now()
-	_, err := r.userCategoriesCollection.InsertOne(ctx, category)
+
+	result, err := r.userCategoriesCollection.InsertOne(ctx, category)
 	if err != nil {
 		utils.Logger.WithError(err).Error("Failed to insert category into MongoDB")
+		return err
 	}
-	return err
+
+	insertedID, ok := result.InsertedID.(primitive.ObjectID)
+	if !ok {
+		utils.Logger.Error("Failed to convert inserted ID to ObjectID")
+		return errors.New("failed to retrieve inserted category ID")
+	}
+	category.ID = insertedID
+
+	return nil
 }
 
 func (r *MongoRepository) GetCategoriesByUser(userID primitive.ObjectID) ([]models.Category, error) {

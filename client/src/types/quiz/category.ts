@@ -1,1 +1,7 @@
-export type Category = { id: string; name: string; color: string };
+export type Category = {
+  id: string;
+  name: string;
+  color: string;
+  createdAt: string;
+  userId: string;
+};

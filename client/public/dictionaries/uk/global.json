@@ -20,5 +20,10 @@
   "pagination": {
     "previous": "Попередня",
     "next": "Наступна"
+  },
+  "multiSelect": {
+    "selectCategories": "Вибрати категорії",
+    "deselectAll": "Скасувати вибір",
+    "selectAll": "Вибрати всі"
   }
 }

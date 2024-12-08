@@ -29,7 +29,7 @@ func (m *Module) Init() error {
 	quizRepository := quizRepo.NewQuizRepository(
 		m.context.DB.(*mongo.Client),
 		m.context.Config.DBName,
-		m.context.Config.Collections.Quizzes,
+		m.context.Config.Collections,
 	)
 
 	categoryRepository := categoryRepo.NewCategoryRepository(

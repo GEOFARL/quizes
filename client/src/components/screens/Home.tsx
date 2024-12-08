@@ -45,7 +45,10 @@ const HomeScreen: React.FC<Props> = ({ translation, user }) => {
               translation={translation}
               user={user}
               questions={questions}
-              resetQuestions={() => setQuestions(null)}
+              resetQuestions={() => {
+                setQuestions(null);
+                setQuizName(null);
+              }}
               openQuestions={() => setIsDialogOpen(true)}
             />
           </CardContent>
