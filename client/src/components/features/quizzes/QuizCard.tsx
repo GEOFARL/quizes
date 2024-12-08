@@ -33,7 +33,7 @@ const QuizCard: React.FC<Props> = ({
         <div className="flex justify-between items-center">
           <p className="text-sm text-muted-foreground">
             {pluralize(
-              quiz.questions.length,
+              quiz.questions?.length,
               "quizzes.card.questionsForms",
               translation,
               pluralizationRules
