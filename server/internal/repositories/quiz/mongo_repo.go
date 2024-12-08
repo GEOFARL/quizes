@@ -26,7 +26,12 @@ func (r *Repository) SaveQuiz(quiz models.Quiz) error {
 	defer cancel()
 
 	quiz.CreatedAt = time.Now()
+	utils.Logger.WithField("quizToSave", quiz).Info("Saving quiz to MongoDB")
+
 	_, err := r.collection.InsertOne(ctx, quiz)
+	if err != nil {
+		utils.Logger.WithError(err).Error("Failed to insert quiz into MongoDB")
+	}
 	return err
 }
 

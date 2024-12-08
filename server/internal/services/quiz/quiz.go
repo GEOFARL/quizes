@@ -7,6 +7,7 @@ import (
 	"auth-service/internal/utils"
 	"errors"
 
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -25,8 +26,15 @@ func (s *Service) SaveQuizWithCategory(userID string, quiz models.Quiz, category
 		return "", errors.New("invalid user ID")
 	}
 
+	utils.Logger.WithField("convertedUserID", userObjectID.Hex()).Info("Converted userID to ObjectID")
+
+	quiz.UserID = userObjectID
+	utils.Logger.WithField("quizUserID", quiz.UserID.Hex()).Info("Assigned UserID to quiz")
+
 	if newCategory != nil {
 		newCategory.UserID = userObjectID
+		utils.Logger.WithField("newCategoryUserID", newCategory.UserID.Hex()).Info("Assigned UserID to newCategory")
+
 		newCategoryID, err := s.categoryService.CreateCategory(newCategory)
 		if err != nil {
 			return "", err
@@ -44,7 +52,11 @@ func (s *Service) SaveQuizWithCategory(userID string, quiz models.Quiz, category
 		return "", errors.New("category ID is required")
 	}
 
-	quiz.UserID = userObjectID
+	utils.Logger.WithFields(logrus.Fields{
+		"finalQuizUserID":   quiz.UserID.Hex(),
+		"finalQuizCategory": quiz.CategoryID.Hex(),
+	}).Info("Final quiz payload before saving")
+
 	err = s.repo.SaveQuiz(quiz)
 	if err != nil {
 		return "", err

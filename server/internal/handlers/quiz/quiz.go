@@ -7,6 +7,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -19,16 +21,28 @@ func New(quizService *quiz.Service) *Handler {
 }
 
 func (h *Handler) SaveQuiz(c *gin.Context) {
-	var req struct {
-		models.Quiz
-		CategoryID  string           `json:"categoryId"`
-		NewCategory *models.Category `json:"newCategory,omitempty"`
-	}
-
 	userID, exists := c.Get("user_id")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
+	}
+
+	userIDStr, ok := userID.(string)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve user ID"})
+		return
+	}
+
+	userObjectID, err := primitive.ObjectIDFromHex(userIDStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	var req struct {
+		Quiz        models.Quiz      `json:"quiz"`
+		NewCategory *models.Category `json:"newCategory,omitempty"`
+		CategoryID  string           `json:"categoryID,omitempty"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -36,15 +50,32 @@ func (h *Handler) SaveQuiz(c *gin.Context) {
 		return
 	}
 
-	categoryID, err := h.quizService.SaveQuizWithCategory(userID.(string), req.Quiz, req.CategoryID, req.NewCategory)
+	utils.Logger.WithFields(logrus.Fields{
+		"userID":      userObjectID,
+		"quiz":        req.Quiz,
+		"newCategory": req.NewCategory,
+		"categoryID":  req.CategoryID,
+	}).Info("Saving quiz with category")
+
+	if req.NewCategory != nil {
+		req.NewCategory.UserID = userObjectID
+	}
+
+	categoryID, err := h.quizService.SaveQuizWithCategory(
+		userObjectID.Hex(),
+		req.Quiz,
+		req.CategoryID,
+		req.NewCategory,
+	)
 	if err != nil {
+		utils.Logger.WithError(err).Error("Failed to save quiz")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
-		"message":    "Quiz saved successfully",
-		"categoryId": categoryID,
+		"message":     "Quiz saved successfully",
+		"category_id": categoryID,
 	})
 }
 

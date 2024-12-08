@@ -2,6 +2,7 @@ package category
 
 import (
 	"auth-service/internal/models"
+	"auth-service/internal/utils"
 	"context"
 	"time"
 
@@ -55,8 +56,13 @@ func (r *MongoRepository) SaveCategory(category *models.Category) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
+	utils.Logger.WithField("categoryInsert", category).Info("Inserting category into MongoDB")
+
 	category.CreatedAt = time.Now()
 	_, err := r.userCategoriesCollection.InsertOne(ctx, category)
+	if err != nil {
+		utils.Logger.WithError(err).Error("Failed to insert category into MongoDB")
+	}
 	return err
 }
 

@@ -3,8 +3,8 @@ package category
 import (
 	"auth-service/internal/models"
 	repository "auth-service/internal/repositories/category"
+	"auth-service/internal/utils"
 	"errors"
-	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -16,9 +16,16 @@ type Service struct {
 func New(repo repository.Repository) *Service {
 	return &Service{repo: repo}
 }
+
 func (s *Service) CreateCategory(category *models.Category) (string, error) {
-	category.ID = primitive.NewObjectID()
-	category.CreatedAt = time.Now()
+	utils.Logger.WithField("categoryUserID", category.UserID).Info("Validating userId in category")
+
+	if category.UserID.IsZero() {
+		utils.Logger.Error("UserID is missing in category")
+		return "", errors.New("userId is required")
+	}
+
+	utils.Logger.WithField("categoryToSave", category).Info("Saving category to MongoDB")
 
 	isDuplicate, err := s.repo.IsCategoryNameDuplicate(category.UserID, category.Name)
 	if err != nil {
